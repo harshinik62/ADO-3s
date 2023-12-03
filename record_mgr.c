@@ -130,7 +130,7 @@ extern RC initRecordManager(void *mgmtData)
     float x = 10;
     float y = 3;
     float result = 0;
-    char a = "Yes"; // Using char for string
+    char *a = "Yes"; // Using char for string
 
     if(strcmp(a, "Yes") == 0){
         initStorageManager();
