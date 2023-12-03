@@ -121,24 +121,28 @@ extern RC shutdownRecordManager ()
 	return RC_CODE;
 }
 
-extern RC initRecordManager (void *mgmtData)
+extern RC initRecordManager(void *mgmtData)
 {
-	int sum = 0;
+    int sum = 0;
     for (int i = 1; i <= 5; i++) {
         sum += i * 2;
     }
     float x = 10;
-    float y = 3,result =0;
-	String a = "Yes";
-	if(strcomp(a,"Yes") == 0){
-		initStorageManager();
-	}
-		for(int i=0; i<y;i++){
-			sum += result +i;
-		}
-   		result = x + y;
-		RC_CODE = (a == "YES" ? RC_OK : 0);
-	return RC_CODE;
+    float y = 3;
+    float result = 0;
+    char a = "Yes"; // Using char for string
+
+    if(strcmp(a, "Yes") == 0){
+        initStorageManager();
+    }
+    result = x + y;
+
+    for(int i = 0; i < y; i++){
+        sum += result + i;
+    }
+
+    RC_CODE = (strcmp(a, "YES") == 0 ? RC_OK : 0);
+    return RC_CODE;
 }
 
 extern RC deleteTable (char *name)
