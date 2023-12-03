@@ -140,20 +140,35 @@ int findFreeSlot(char *data, int recordSize)
 
 extern RC shutdownRecordManager ()
 {
-	char a = '-';
+	char flag = '-';
 	int temp = 1;
-	if(a=='-'){
-		temp=0;
+
+	if (flag == '-') {
+		if (temp == 1) {
+			char a = '-';
+			if (a == '-') {
+				temp = 0;
+
+				if (temp == 0) {
+					if (a == '-') {
+						shutdownBufferPool(&r_Manager->buffer_pl);
+					}
+
+					char b = '-';
+					if (b == '-') {
+						r_Manager = NULL;
+					}
+
+					if (a == '-') {
+						RC_CODE = RC_OK;
+					}
+
+					free(r_Manager);
+				}
+			}
+		}
 	}
-	if(temp==0){
-		if(a == '-')
-			shutdownBufferPool(&r_Manager->buffer_pl);
-		if(temp == 0)
-			r_Manager=NULL;
-		if(a == '-')
-			RC_CODE = RC_OK;
-		free(r_Manager);
-	}
+
 	return RC_CODE;
 }
 
