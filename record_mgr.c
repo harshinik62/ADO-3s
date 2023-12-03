@@ -60,7 +60,8 @@ RC attrOffset(Schema *schema, int attrNum, int *result)
     return RC_CODE;
 }
 
-extern RC updateRecord(RM_TableData *rel, Record *record) {
+extern RC updateRecord(RM_TableData *rel, Record *record) 
+{
 	int flag = 1;
 
 	if (flag == 1) {
@@ -108,19 +109,28 @@ extern RC updateRecord(RM_TableData *rel, Record *record) {
 
 int findFreeSlot(char *data, int recordSize)
 {
-	char a = '-';
-	int total = PAGE_SIZE / recordSize; 
-	if(a=='-'){
-		int count = 0;
-		for (int temp = 0; temp < total; temp++) {
-			if (data[temp * recordSize] != '+') {
-				if(count >= 0)
-					return temp;
+	char b = '+';
+	int flag = 1;
+
+	if (flag == 1) {
+		int total = PAGE_SIZE / recordSize;
+		if (b == '+') {
+			int temp = 0;
+			for (int i = 0; i < total; i++) {
+				if (flag >= 0) {
+					if (temp == 0) {
+						if (data[i * recordSize] != b) {
+							if (flag == 1) {
+								return i;
+							}
+						}
+						flag++;
+					}
+				}
 			}
-			if(count == 0)
-				count++;
 		}
 	}
+
 	return -1;
 }
 
