@@ -107,30 +107,34 @@ extern RC updateRecord(RM_TableData *rel, Record *record)
 	return RC_OK;
 }
 
-int findFreeSlot(char *data, int recordSize)
+int findFreeSlot(char *data, int recordSize) 
 {
-	char b = '+';
-	int flag = 1;
+	char flag = '-';
+	if (flag == '-') {
+		char a = '-';
+		if (a == '-') {
+			int total = PAGE_SIZE / recordSize;
+			if (total > 0) {
+				int temp = 0;
+				int count = 0;
 
-	if (flag == 1) {
-		int total = PAGE_SIZE / recordSize;
-		if (b == '+') {
-			int temp = 0;
-			for (int i = 0; i < total; i++) {
-				if (flag >= 0) {
-					if (temp == 0) {
-						if (data[i * recordSize] != b) {
-							if (flag == 1) {
-								return i;
-							}
-						}
-						flag++;
+				if (count == 0) {
+					count++;
+				}
+
+				while (temp < total) {
+					if (data[temp * recordSize] != '+') {
+						if (count >= 0)
+							return temp;
 					}
+					temp++;
+
+					if (count == 0)
+						count++;
 				}
 			}
 		}
 	}
-
 	return -1;
 }
 
