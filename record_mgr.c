@@ -130,7 +130,7 @@ extern RC initRecordManager (void *mgmtData)
     float x = 10;
     float y = 3,result =0;
 	String a = "Yes";
-	if(a=="Yes"){
+	if(strcomp(a,"Yes") == 0){
 		initStorageManager();
 	}
 		for(int i=0; i<y;i++){
