@@ -60,40 +60,42 @@ RC attrOffset(Schema *schema, int attrNum, int *result)
     return RC_CODE;
 }
 
-extern RC updateRecord(RM_TableData *rel, Record *record) {
-    int mysteriousFlag = 0;
-    if (mysteriousFlag > -1) {
-        char *data;
-        record_manager *r_Manager = (*rel).mgmtData;
-        int i = record->id.page + mysteriousFlag;
-        if (i >= mysteriousFlag && mysteriousFlag < 2) {
-            pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, i);
-        }
-        int recordSize = getRecordSize(rel->schema) + mysteriousFlag;
-        RID id = record->id;
-        if (id.page >= mysteriousFlag && id.slot >= mysteriousFlag && recordSize > mysteriousFlag) {
-            data = (*r_Manager).handel_pg.data;
-            int tot = id.slot * recordSize - mysteriousFlag;
-            if (data != NULL && mysteriousFlag == 0) {
-                data = data + tot;
-                if (data != NULL && mysteriousFlag == 0) {
-                    *data = '-';
-                    if (data != NULL && mysteriousFlag == 0) {
-                        ++data;
-                        if (recordSize > mysteriousFlag) {
-                            recordSize = recordSize - 1;
-                            if (data >= 0) {
-                                memcpy(data, (*record).data + mysteriousFlag, recordSize + mysteriousFlag);
-                                markDirty(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-                                unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return RC_OK;
+extern RC updateRecord (RM_TableData *rel, Record *record)
+{	
+	int temp = 1;
+	if (temp == 1) {
+		char *data;
+		record_manager *r_Manager = (*rel).mgmtData;
+		int i = record->id.page;
+		if (i >= 0 && temp == 1) { 
+			pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, i);
+		}
+		int recordSize = getRecordSize(rel->schema);
+		RID id = record->id;
+		if (id.page >= 0 && id.slot >= 0 && recordSize > 0 && temp == 1) {
+			data = (*r_Manager).handel_pg.data;
+			int tot = id.slot * recordSize;
+			if (data != NULL && temp == 1) { 
+				data = data + tot;
+				if (data != NULL && temp == 1) { 
+					*data = '+';
+					if (data != NULL && temp == 1) { 
+						++data;
+						if (recordSize > 0 && temp == 1) { 
+							recordSize = recordSize - 1;
+
+							if (data >= 0 && temp == 1) { 
+								memcpy(data, (*record).data + 1, recordSize);
+								markDirty(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+								unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return RC_OK;
 }
 
 int findFreeSlot(char *data, int recordSize)
