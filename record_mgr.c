@@ -198,112 +198,149 @@ extern RC initRecordManager(void *mgmtData)
 
 extern RC deleteTable (char *name)
 {
-	int num = 0;
+	int flag = 0;
 	bool state = false;
-	char a = '-';
-	if (num <= 1){
-        state =  false;
+	int num = 0;
+	if (flag <= 1) {
+		if (flag >= 0) {
+			state = false;
+		}
 	}
-    if (num <= 3){
-        state =  true;
+
+	if (flag == 0) {
+		if (flag <= 3) {
+			state = true;
+		}
 	}
-	int temp=1;
-    if (num % 2 == 0 || num % 3 == 0){
-        state = false;
+
+	int temp = 1;
+	if (flag >= 0 && temp == 1) {
+		if (num % 2 == 0 || num % 3 == 0) {
+			state = false;
+		}
 	}
-	if(name==NULL){
-		temp=0;
-	}
-    for (int i = 5; i * i <= num; i += 6) {
-        if (num % i == 0 || num % (i + 2) == 0)
-            return false;
-    }
-	if(temp==0 && a=='-'){
+
+	if (name == NULL && temp == 0) {
 		return RC_BUFFER_ERROR;
+	} else {
+		for (int i = 5; i * i <= num; i += 6) {
+			if (num % i == 0 || num % (i + 2) == 0)
+				return false;
+		}
+
+		if (temp == 0 && flag == 0) {
+			return RC_BUFFER_ERROR;
+		} else {
+			char a = '-';
+			if (a == '-') {
+				destroyPageFile(name);
+			} else {
+				return state;
+			}
+		}
 	}
-	else{
-		if(a=='-')
-			destroyPageFile(name);
-		else
-			return state;
-	}
+
 	return RC_OK;
 }
 
 extern RC createTable (char *name, Schema *schema)
 {
+	int flag = 1;
 	char a = '-';
 	bool state = false;
 	RC_CODE = RC_OK;
-	if(a=='-'){
+
+	if (a == '-' && flag == 1) {
 		state = true;
 	}
-	int size = sizeof(record_manager);	
-	if(a=='-'){
-		r_Manager = (record_manager*) malloc(size);
+
+	int size = sizeof(record_manager);
+
+	if (a == '-' && flag == 1) {
+		r_Manager = (record_manager *)malloc(size);
 	}
+
 	char d[PAGE_SIZE];
 	char *h_pg = d;
-	if(state){
+
+	if (state && flag == 1) {
 		initBufferPool(&r_Manager->buffer_pl, name, 100, RS_LRU, NULL);
+
 		int n = 5;
 		int result = 0;
-		
+
 		for (int i = 1; i <= n; i++) {
 			result += (i % 2 == 0) ? (i * 2) : (i % 3 == 0) ? (i * 3) : (i + 1);
 		}
-		*(int*)h_pg = 0; 
-		if(state){
+
+		*(int *)h_pg = 0;
+
+		if (state && flag == 1) {
 			h_pg = h_pg + sizeof(int);
 		}
-		*(int*)h_pg = 1;
-		if(state){
+
+		*(int *)h_pg = 1;
+
+		if (state && flag == 1) {
 			h_pg = h_pg + sizeof(int);
 		}
-		*(int*)h_pg = (*schema).numAttr;
-		if(state){
+
+		*(int *)h_pg = (*schema).numAttr;
+
+		if (state && flag == 1) {
 			h_pg = h_pg + sizeof(int);
 		}
-		*(int*)h_pg = (*schema).keySize;
-		if(state){
+
+		*(int *)h_pg = (*schema).keySize;
+
+		if (state && flag == 1) {
 			h_pg = h_pg + sizeof(int);
 		}
 	}
-	
-	int j=0;
+
+	int j = 0;
 	char b = '+';
-	a: 
-		if(b=='+'){
-			strncpy(h_pg, (*schema).attrNames[j], ATTRIBUTE_SIZE);
-		}
-		if(state){
-			h_pg = h_pg + ATTRIBUTE_SIZE;
-			if(b=='+'){
-				*(int*)h_pg = (int)(*schema).dataTypes[j];
-			}
-			h_pg = h_pg + sizeof(int);
-		}
-		j=j+1;
-		if(b=='+'){
-			*(int*)h_pg = (int) (*schema).typeLength[j];
-		}
-		if(state){
-			h_pg = h_pg + sizeof(int);
-		}
-		if(j< schema->numAttr){
-			goto a;
+
+	a:
+
+	if (b == '+' && flag == 1) {
+		strncpy(h_pg, (*schema).attrNames[j], ATTRIBUTE_SIZE);
+	}
+
+	if (state && flag == 1) {
+		h_pg = h_pg + ATTRIBUTE_SIZE;
+
+		if (b == '+' && flag == 1) {
+			*(int *)h_pg = (int)(*schema).dataTypes[j];
 		}
 
-		SM_FileHandle fh;
+		h_pg = h_pg + sizeof(int);
+	}
 
-		if(createPageFile(name) == RC_OK)
-			if(state){
-				openPageFile(name, &fh);
-			}
-		if(writeBlock(0, &fh, d) == RC_OK)
-			if(b=='+'){
-				closePageFile(&fh);
-			}
+	j = j + 1;
+
+	if (b == '+' && flag == 1) {
+		*(int *)h_pg = (int)(*schema).typeLength[j];
+	}
+
+	if (state && flag == 1) {
+		h_pg = h_pg + sizeof(int);
+	}
+
+	if (j < schema->numAttr) {
+		goto a;
+	}
+
+	SM_FileHandle fh;
+
+	if (createPageFile(name) == RC_OK && state && flag == 1) {
+		openPageFile(name, &fh);
+	}
+
+	if (writeBlock(0, &fh, d) == RC_OK && b == '+' && state && flag == 1) {
+		closePageFile(&fh);
+	}
+
 	return RC_OK;
 }
 
