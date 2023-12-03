@@ -128,14 +128,16 @@ extern RC initRecordManager (void *mgmtData)
         sum += i * 2;
     }
     float x = 10;
-    float y = 3;
-	char a = '-';
-	if(a=='-'){
+    float y = 3,result =0;
+	String a = "Yes";
+	if(a=="Yes"){
 		initStorageManager();
-   		float result = x + y;
-		RC_CODE = RC_OK;
-		sum += result +  2;
 	}
+		for(int i=0; i<y;i++){
+			sum += result +i;
+		}
+   		result = x + y;
+		RC_CODE = (a == "YES" ? RC_OK : 0);
 	return RC_CODE;
 }
 
