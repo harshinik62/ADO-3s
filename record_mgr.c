@@ -22,28 +22,41 @@ typedef struct RecordManager
 
 record_manager *r_Manager;
 
-RC attrOffset (Schema *schema, int attrNum, int *result)
-{
-	int temp=1;
-	*result = 1;
-	if(temp == 1){
-		temp=0;
-	}
-	RC_CODE = RC_OK;
-	int i;
-	if(temp==0){
-		for (i = 0; i < attrNum; i++) {
-			*result += (schema->dataTypes[i] == DT_INT) ? sizeof(int) :
-            (schema->dataTypes[i] == DT_STRING) ? schema->typeLength[i] :
-            (schema->dataTypes[i] == DT_BOOL) ? sizeof(bool) :
-            (schema->dataTypes[i] == DT_FLOAT) ? sizeof(float) :
-            0; // Default value if none of the cases match
-		}
-	}
-	else{
-		RC_CODE = RC_SCHEMA_ERROR;
-	}
-	return RC_CODE;
+RC attrOffset(Schema *schema, int attrNum, int *result) {
+    int temp = 1; 
+    *result = 1;
+
+    if (temp == 1) {
+        temp = 0;
+    }
+
+    RC_CODE = RC_OK;
+
+    int i;
+    if (temp == 0) {
+        for (i = 0; i < attrNum; i++) {
+            switch (schema->dataTypes[i]) {
+                case DT_INT:
+                    *result += sizeof(int);
+                    break;
+                case DT_STRING:
+                    *result += schema->typeLength[i];
+                    break;
+                case DT_BOOL:
+                    *result += sizeof(bool);
+                    break;
+                case DT_FLOAT:
+                    *result += sizeof(float);
+                    break;
+                default:
+                    *result += 0; 
+            }
+        }
+    } else {
+        RC_CODE = RC_SCHEMA_ERROR; 
+    }
+
+    return RC_CODE;
 }
 
 extern RC updateRecord (RM_TableData *rel, Record *record)
