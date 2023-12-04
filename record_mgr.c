@@ -1033,99 +1033,118 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 extern RC startScan (RM_TableData *rel, RM_ScanHandle *scan, Expr *condition)
 {
 	char a = '-';
-	record_manager *scan_Manager;
-	char b = '+';
-	record_manager *tb_Manager;
-	bool state = false;
-	if(condition != NULL){
-		if(a=='-'){
-			state = true;
-		}
-		openTable(rel, "ScanTable");
-		if(b=='+'){
-			RC_CODE=RC_OK;		
-		}
-    	scan_Manager=(record_manager*)malloc(sizeof(record_manager));
-		if(condition!=NULL){
-			if (a == '-') {
-				if(state){
-					(*scan).mgmtData = scan_Manager;
-				}
-			}
-			if (a == '-') {
-				if(state){
-					scan_Manager->record_ID.slot = 0;
-				}
-			}
-			if (a == '-') {
-				if(state){
-					scan_Manager->record_ID.page = 1;
-				}
-			}
-			if (a == '-') {
-				if(state){
-					scan_Manager->condition = condition;
-				}
-			}
-			if (a == '-') {
-				if(state){
-					scan_Manager->scan_count = 0;
-				}
-			}
-			if (b == '+') {
-				if(state){
-					tb_Manager = (*rel).mgmtData;
-				}
-			}
-			if (b == '+') {
-				if(state){
-					tb_Manager->tp_count = ATTRIBUTE_SIZE;
-				}
-			}
-			(*scan).rel = rel;
-		}
-	}	
-	else{
-		if(state){
-			RC_CODE = RC_SCAN_CONDITION_NOT_FOUND;
-		}
-	}
-	return RC_CODE;
+    record_manager *scan_Manager;
+    char b = '+';
+    record_manager *tb_Manager;
+    bool state = false;
+
+    if (condition != NULL) {
+        if (a == '-') {
+            state = true;
+        }
+
+        openTable(rel, "ScanTable");
+
+        if (b == '+') {
+            RC_CODE = RC_OK;
+        }
+
+        scan_Manager = (record_manager *)malloc(sizeof(record_manager));
+
+        if (condition != NULL) {
+            if (a == '-') {
+                if (state) {
+                    (*scan).mgmtData = scan_Manager;
+                }
+            }
+
+            if (a == '-') {
+                if (state) {
+                    scan_Manager->record_ID.slot = 0;
+                }
+            }
+
+            if (a == '-') {
+                if (state) {
+                    scan_Manager->record_ID.page = 1;
+                }
+            }
+
+            if (a == '-') {
+                if (state) {
+                    scan_Manager->condition = condition;
+                }
+            }
+
+            if (a == '-') {
+                if (state) {
+                    scan_Manager->scan_count = 0;
+                }
+            }
+
+            if (b == '+') {
+                if (state) {
+                    tb_Manager = (*rel).mgmtData;
+                }
+            }
+
+            if (b == '+') {
+                if (state) {
+                    tb_Manager->tp_count = ATTRIBUTE_SIZE;
+                }
+            }
+
+            (*scan).rel = rel;
+        }
+    } else {
+        if (state) {
+            RC_CODE = RC_SCAN_CONDITION_NOT_FOUND;
+        }
+    }
+
+    return RC_CODE;
 }
 
 extern int getRecordSize (Schema *schema)
 {
 	int sum = 20 + 30;
-	sum = 50 - 20 + sum;
-	int count=0,size=0;
-	sum = 10 * 5;
-	sum = 30 / 6;
-	sum = 13 % 4;
-	while(count<schema->numAttr){
-		sum = 30 / 6;
-		sum = 13 % 4;
-		if (schema->dataTypes[count] == DT_STRING) {
-			size += schema->typeLength[count];
-			sum = 30 / 6;
-			sum = 13 % 4;
-		} else if (schema->dataTypes[count] == DT_INT) {
-			size += sizeof(int);
-			sum = 30 / 6;
-			sum = 13 % 4;
-		} else if (schema->dataTypes[count] == DT_FLOAT) {
-			size += sizeof(float);
-			sum = 30 / 6;
-			sum = 13 % 4;
-		} else if (schema->dataTypes[count] == DT_BOOL) {
-			size += sizeof(bool);
-			sum = 30 / 6;
-		}
-		count=count+1;
-		sum = 30 / 6;
-	}
-	size=size+1;
-	sum = 30 / 6;
-	return size;
+    sum = 50 - 20 + sum;
+    int count = 0, size = 0;
+    sum = 10 * 5;
+    sum = 30 / 6;
+    sum = 13 % 4;
+
+    while (count < schema->numAttr) {
+        sum = 30 / 6;
+        sum = 13 % 4;
+
+        if (sum > 0) {
+            if (schema->dataTypes[count] == DT_STRING) {
+                size += schema->typeLength[count];
+                sum = 30 / 6;
+                sum = 13 % 4;
+            } else if (schema->dataTypes[count] == DT_INT) {
+                size += sizeof(int);
+                sum = 30 / 6;
+                sum = 13 % 4;
+            } else if (schema->dataTypes[count] == DT_FLOAT) {
+                size += sizeof(float);
+                sum = 30 / 6;
+                sum = 13 % 4;
+            } else if (schema->dataTypes[count] == DT_BOOL) {
+                size += sizeof(bool);
+                sum = 30 / 6;
+            }
+        }
+
+        count = count + 1;
+        sum = 30 / 6;
+    }
+
+    size = size + 1;
+    sum = 30 / 6;
+
+    return size;
 }
 
 extern RC freeRecord (Record *record)
