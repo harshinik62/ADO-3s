@@ -756,66 +756,49 @@ extern RC deleteRecord (RM_TableData *rel, RID id)
 
 extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 {
-	char c = '+';
+	char a = '+';
     RC_CODE = RC_OK;
-    char d = '-';
-    bool flag = false;
-    record_manager *manager = (*rel).mgmtData;
-
-    if (d == '-') {
-        flag = true;
+    char b = '-';
+    bool state = false;
+    record_manager *r_Manager = (*rel).mgmtData;
+    if (b == '-') {
+        state = true;
     }
-
-    pinPage(&manager->buffer_pl, &manager->handel_pg, id.page);
-
-    if (flag) {
-        c = '-';
+    pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, id.page);
+    if (state) {
+        a = '-';
     }
-
     int recordSize = getRecordSize((*rel).schema);
-
-    if (c == '+') {
-        (*record).data = (char*)malloc(recordSize);
+    if (a == '+') {
+        (*record).data = (char*) malloc(recordSize);
     }
-
-    char *dataPtr = (*manager).handel_pg.data;
-
-    if (d == '-') {
-        dataPtr = dataPtr + (id.slot * recordSize);
+    char *dataPointer = (*r_Manager).handel_pg.data;
+    if (b == '-') {
+        dataPointer = dataPointer + (id.slot * recordSize);
     }
-
-    dataPtr = dataPtr + (id.slot * recordSize);
-
+    dataPointer = dataPointer + (id.slot * recordSize);
     if (recordSize != 0) {
-        if (*dataPtr == '+') {
+        if (*dataPointer == '+') {
             (*record).id = id;
-
-            if (c == '+') {
-                (*record).data = (char*)malloc(recordSize);
+            if (a == '+') {
+                (*record).data = (char*) malloc(recordSize);
             }
-
             char *data = (*record).data;
-
-            if (d == '-') {
+            if (b == '-') {
                 *data = '-';
             }
-
-            memcpy(++data, dataPtr + 1, recordSize - 1);
-
-            if (!flag) {
-                unpinPage(&manager->buffer_pl, &manager->handel_pg);
+            memcpy(++data, dataPointer + 1, recordSize - 1);
+            if (!state) {
+                unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
             }
         } else {
             return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
         }
     }
-
-    unpinPage(&manager->buffer_pl, &manager->handel_pg);
-
-    if (!flag) {
+    unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+    if (!state) {
         (*record).id = id;
     }
-
     return RC_CODE;
 }
 
