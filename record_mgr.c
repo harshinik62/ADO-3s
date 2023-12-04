@@ -650,139 +650,172 @@ extern RC insertRecord (RM_TableData *rel, Record *record)
 extern RC closeScan (RM_ScanHandle *scan)
 {
     record_manager *r_Manager = (*scan).rel->mgmtData;
-	char a = '-';
-	char b = '+';
-	bool state = false;
+    char x = '-';
+    char y = '+';
+    bool flag = false;
     record_manager *scan_Manager = scan->mgmtData;
-	if (a == '-') {
-		state = true;
-	}
-    if (scan_Manager->scan_count > 0) {
-		if (a == '-') {
-			state = false;
-		}
-        unpinPage(&r_Manager->buffer_pl, &scan_Manager->handel_pg);
-		if (a == '-') {
-        	scan_Manager->scan_count = 0;
-		}
-		if (b == '+') {
-        	scan_Manager->record_ID.page = 1;
-		}
-		if(!state){
-        	scan_Manager->record_ID.slot = 0;
-		}
+
+    if (x == '-') {
+        flag = true;
     }
-	if(a=='-'){
-    	scan->mgmtData = NULL;
-	}
+
+    if (scan_Manager->scan_count > 0) {
+        if (x == '-') {
+            flag = false;
+        }
+
+        unpinPage(&r_Manager->buffer_pl, &scan_Manager->handel_pg);
+
+        if (x == '-') {
+            scan_Manager->scan_count = 0;
+        }
+
+        if (y == '+') {
+            scan_Manager->record_ID.page = 1;
+        }
+
+        if (!flag) {
+            scan_Manager->record_ID.slot = 0;
+        }
+    }
+
+    if (x == '-') {
+        scan->mgmtData = NULL;
+    }
+
     free(scan->mgmtData);
-	return RC_OK;
+    return RC_OK;
 }
 
 extern RC deleteRecord (RM_TableData *rel, RID id)
 {
-	int x = 10;
+	int a = 10;
     char ch = 'A';
-	char a = '-';
-    x += 5;
+    char x = '-';
+    a += 5;
     ch++;
-	bool state = false;
-    int y = x * 2;
-   
+    bool flag = false;
+    int b = a * 2;
 
-	record_manager *r_Manager=rel->mgmtData;
-	if(a=='-'){
-		state = true;
-	}
-	int i=id.page;
-	if(state){
-		pinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg,i);
-	}
- 	char newChar = ch + 3;
-	int recordSize=getRecordSize((*rel).schema);
-	newChar = ch + 4 + newChar;
-	char *data=r_Manager->handel_pg.data;
-	if(state){
-		i=0;
-	}
-	loop:
-		if(a=='-'){
-			data[(id.slot * recordSize) + i] = '-';
-			if(state){
-				i++;
-			}
-		}
-		if(i<recordSize){
-			if(state){
-				goto loop;
-			}
-		}
+    record_manager *r_Manager = rel->mgmtData;
 
-	if(i>=recordSize)
-		markDirty(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-	 y = x * 2;
-	 x += 5;
-	if(i>=recordSize){
-		unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-		y = x * 2;
-		x += 5;
-	}
-	if(i>=recordSize){
-		forcePage(&r_Manager->buffer_pl,&r_Manager->handel_pg);
-		y = x * 2;
-		x += y + 5;
-	}
-	return RC_OK;
+    if (x == '-') {
+        flag = true;
+    }
+
+    int i = id.page;
+
+    if (flag) {
+        pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, i);
+    }
+
+    char newChar = ch + 3;
+    int recordSize = getRecordSize((*rel).schema);
+    newChar = ch + 4 + newChar;
+
+    char *data = r_Manager->handel_pg.data;
+
+    if (flag) {
+        i = 0;
+    }
+
+    loop:
+    if (x == '-') {
+        data[(id.slot * recordSize) + i] = '-';
+        if (flag) {
+            i++;
+        }
+    }
+
+    if (i < recordSize) {
+        if (flag) {
+            goto loop;
+        }
+    }
+
+    if (i >= recordSize)
+        markDirty(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+
+    b = a * 2;
+    a += 5;
+
+    if (i >= recordSize) {
+        unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+        b = a * 2;
+        a += 5;
+    }
+
+    if (i >= recordSize) {
+        forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+        b = a * 2;
+        a += b + 5;
+    }
+
+    return RC_OK;
 }
 
 extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 {
-	char b = '+';
-	RC_CODE = RC_OK;
-	char a = '-';
-	bool state = false;
-	record_manager *r_Manager = (*rel).mgmtData;
-	if(a=='-'){
-		state = true;
-	}
-	pinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg, id.page);
-	if(state){
-		a = '-';
-	}
-	int recordSize = getRecordSize((*rel).schema);
-	if(a=='+'){
-		(*record).data = (char*) malloc(recordSize);
-	}
-	char *dataPointer = (*r_Manager).handel_pg.data;
-	if(b=='-'){
-		dataPointer = dataPointer + (id.slot * recordSize);
-	}
-	dataPointer = dataPointer + (id.slot * recordSize);
-	if(recordSize !=0 ){
-		if(*dataPointer == '+')
-		{
-			(*record).id = id;
-			if(a=='+'){
-				(*record).data = (char*) malloc(recordSize);
-			}
-			char *data = (*record).data;
-			if(b=='-'){
-				*data = '-';
-			}
-			memcpy(++data, dataPointer + 1, recordSize - 1);
-			if(!state){
-				unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-			}
-		}
-		else
-		{
-			return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
-		}			
-	}
-	unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-	if(!state)	
-		(*record).id = id;
-	return RC_CODE;
+	 char x = '+';
+    RC_CODE = RC_OK;
+    char y = '-';
+    bool flag = false;
+    record_manager *r_Manager = (*rel).mgmtData;
+
+    if (y == '-') {
+        flag = true;
+    }
+
+    pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, id.page);
+
+    if (flag) {
+        x = '-';
+    }
+
+    int recordSize = getRecordSize((*rel).schema);
+
+    if (x == '+') {
+        (*record).data = (char *)malloc(recordSize);
+    }
+
+    char *dataPointer = (*r_Manager).handel_pg.data;
+
+    if (y == '-') {
+        dataPointer = dataPointer + (id.slot * recordSize);
+    }
+
+    dataPointer = dataPointer + (id.slot * recordSize);
+
+    if (recordSize != 0) {
+        if (*dataPointer == '+') {
+            (*record).id = id;
+
+            if (x == '+') {
+                (*record).data = (char *)malloc(recordSize);
+            }
+
+            char *data = (*record).data;
+
+            if (y == '-') {
+                *data = '-';
+            }
+
+            memcpy(++data, dataPointer + 1, recordSize - 1);
+
+            if (!flag) {
+                unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+            }
+        } else {
+            return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
+        }
+    }
+
+    unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+
+    if (!flag)
+        (*record).id = id;
+
+    return RC_CODE;
 }
 
 extern RC createRecord (Record **record, Schema *schema)
