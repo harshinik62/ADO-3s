@@ -756,7 +756,7 @@ extern RC deleteRecord (RM_TableData *rel, RID id)
 
 extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 {
-	int temp =0;
+	 int temp =0;
     while (TRUE){
         record_manager *r_Manager = rel->mgmtData;
         temp = temp++;
@@ -787,7 +787,7 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
     record->data = (char*) malloc(recordSize);
     if (record->data == NULL) {
         unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-        return RC_RM_MEMORY_ERROR;
+        return RC_ERROR;
     }
 
     memcpy(record->data, dataPointer, recordSize);
