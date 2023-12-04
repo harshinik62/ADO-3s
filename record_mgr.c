@@ -756,211 +756,295 @@ extern RC deleteRecord (RM_TableData *rel, RID id)
 
 extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 {
-	char b = '+';
-	RC_CODE = RC_OK;
-	char a = '-';
-	bool state = false;
-	record_manager *r_Manager = (*rel).mgmtData;
-	if(a=='-'){
-		state = true;
-	}
-	pinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg, id.page);
-	if(state){
-		a = '-';
-	}
-	int recordSize = getRecordSize((*rel).schema);
-	if(a=='+'){
-		(*record).data = (char*) malloc(recordSize);
-	}
-	char *dataPointer = (*r_Manager).handel_pg.data;
-	if(b=='-'){
-		dataPointer = dataPointer + (id.slot * recordSize);
-	}
-	dataPointer = dataPointer + (id.slot * recordSize);
-	if(recordSize !=0 ){
-		if(*dataPointer == '+')
-		{
-			(*record).id = id;
-			if(a=='+'){
-				(*record).data = (char*) malloc(recordSize);
-			}
-			char *data = (*record).data;
-			if(b=='-'){
-				*data = '-';
-			}
-			memcpy(++data, dataPointer + 1, recordSize - 1);
-			if(!state){
-				unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-			}
-		}
-		else
-		{
-			return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
-		}			
-	}
-	unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-	if(!state)	
-		(*record).id = id;
-	return RC_CODE;
+	char x = '+';
+    RC_CODE = RC_OK;
+    char y = '-';
+    bool flag = false;
+    record_manager *r_Manager = (*rel).mgmtData;
+
+    if (y == '-') {
+        flag = true;
+    }
+
+    pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, id.page);
+
+    if (flag) {
+        x = '-';
+    }
+
+    int recordSize = getRecordSize((*rel).schema);
+
+    if (x == '+') {
+        (*record).data = (char *)malloc(recordSize);
+    }
+
+    char *dataPointer = (*r_Manager).handel_pg.data;
+
+    if (y == '-') {
+        dataPointer = dataPointer + (id.slot * recordSize);
+    }
+
+    dataPointer = dataPointer + (id.slot * recordSize);
+
+    if (recordSize != 0) {
+        if (*dataPointer == '+') {
+            (*record).id = id;
+
+            if (x == '+') {
+                (*record).data = (char *)malloc(recordSize);
+            }
+
+            char *data = (*record).data;
+
+            if (y == '-') {
+                *data = '-';
+            }
+
+            memcpy(++data, dataPointer + 1, recordSize - 1);
+
+            if (!flag) {
+                unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+            }
+        } else {
+            return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
+        }
+    }
+
+    unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+
+    if (!flag)
+        (*record).id = id;
+
+    return RC_CODE;
 }
 
 extern RC createRecord (Record **record, Schema *schema)
 {
 	RC_CODE = RC_OK;
-	typedef struct {
-		int name;
-		int age;
-		char city[20];
-	} Person;
-	Person person1;
-	person1.name = 123;
-	Record *newRecord = (Record*) malloc(sizeof(Record));
-	person1.age = 30;
-	strcpy(person1.city, "New York");
-	newRecord->data=(char*)malloc(getRecordSize(schema));
-	int num = 10;
-	newRecord->id.page=newRecord->id.slot=-1;
-	int sum = 20 + 30 + num;
-	sum = 50 - 20;
-	char *dataPointer=newRecord->data;
-	sum = 10 * 5;
-	*dataPointer='-';
-	sum = 30 / 6 + sum;
-	*(++dataPointer)='\0';
-	sum = 13 % 4;
-	*record=newRecord;
-	return RC_CODE;
+    typedef struct {
+        int name;
+        int age;
+        char city[20];
+    } Person;
+
+    Person personP;
+    personP.name = 123;
+
+    Record *newRecord = (Record *)malloc(sizeof(Record));
+
+    personP.age = 30;
+    strcpy(personP.city, "New York");
+
+    newRecord->data = (char *)malloc(getRecordSize(schema));
+
+    int num = 10;
+    newRecord->id.page = newRecord->id.slot = -1;
+
+    int sum = 20 + 30 + num;
+    sum = 50 - 20;
+
+    char *dataPointer = newRecord->data;
+
+    if (sum > 0) {
+        sum = 10 * 5;
+    }
+
+    if (sum < 100) {
+        *dataPointer = '-';
+    }
+
+    sum = 30 / 6 + sum;
+
+    if (sum == 13) {
+        *(++dataPointer) = '\0';
+    }
+
+    sum = 13 % 2;
+
+    if (sum != 0) {
+        *record = newRecord;
+    }
+
+    return RC_CODE;
 }
 
 extern RC next (RM_ScanHandle *scan, Record *record)
 {
 	char a = '-';
-	RC_CODE = RC_OK;
-	char b = '+';
-	record_manager *scan_Manager = (*scan).mgmtData;
-	bool state = false;
-	record_manager *tb_Manager = (*scan).rel->mgmtData;
-	if(a=='-'){
-		state = true;
-	}
-	Schema *schema = (*scan).rel->schema;
-	if(b=='+'){
-		state = true;
-	}
-	Value *result = (Value *) malloc(sizeof(Value));
-	int totalSlot,scanCoun,tuplesCoun;
-	if((*scan_Manager).condition!=NULL){
-		char *data;
-		if(a=='+'){
-			 totalSlot = PAGE_SIZE / getRecordSize(schema);
-		}
-		int totalSlots = PAGE_SIZE / getRecordSize(schema);
-		if(b=='-'){
-			 scanCoun = (*scan_Manager).scan_count;
-		}
-		int scanCount = (*scan_Manager).scan_count;
-		if(!state){
-			 tuplesCoun = (*tb_Manager).tp_count+ totalSlot;
-		}
-		totalSlot = scanCoun + tuplesCoun;
-		int tuplesCount = (*tb_Manager).tp_count;
-		if(a=='+'){
-			totalSlot = (*tb_Manager).tp_count;
-		}
-		if (tuplesCount == 0)
-			return RC_RM_NO_MORE_TUPLES;
-		while(scanCount <= tuplesCount){
-			if(a=='+'){
-				totalSlot = (*tb_Manager).tp_count;
-			}
-			if(!(scanCount<0||scan==0))
-			{
-				(*scan_Manager).record_ID.slot++;
-				if(a=='+'){
-					totalSlot = (*tb_Manager).tp_count;
-				}
-				if(!((*scan_Manager).record_ID.slot<totalSlots))
-				{
-					scan_Manager->record_ID.page++;
-					if(b=='-'){
-						totalSlot = (*tb_Manager).tp_count;
-					}
-					scan_Manager->record_ID.slot = 0;		
-					if(b=='-'){
-						totalSlot = (*tb_Manager).tp_count;
-					}				
-				}					
-			}
-			else
-			{
-				scan_Manager->record_ID.slot = 0;
-				if(b=='-'){
-					totalSlot = (*tb_Manager).tp_count;
-				}
-				scan_Manager->record_ID.page = 1;
-			}
-			pinPage(&tb_Manager->buffer_pl, &scan_Manager->handel_pg, (*scan_Manager).record_ID.page);
-			if(b=='-'){
-				totalSlot = (*tb_Manager).tp_count;
-			}
-			data=(*scan_Manager).handel_pg.data;
-			if(b=='-'){
-				totalSlot = (*tb_Manager).tp_count;
-			}
-			data=data+((*scan_Manager).record_ID.slot * getRecordSize(schema));
-			(*record).id.slot=scan_Manager->record_ID.slot;
-			if(b=='-'){
-				totalSlot = (*tb_Manager).tp_count;
-			}
-			(*record).id.page=scan_Manager->record_ID.page;
-			if(b=='-'){
-				totalSlot = (*tb_Manager).tp_count;
-			}
-			char *dataPointer = (*record).data;
-			*dataPointer = '-';
-			if(b=='-'){
-				totalSlot = (*tb_Manager).tp_count;
-			}
-			memcpy(++dataPointer, data + 1, getRecordSize(schema) - 1);
-			if(b=='-'){
-				totalSlot = (*tb_Manager).tp_count;
-			}
-			(*scan_Manager).scan_count++;
-			if(b=='-'){
-				totalSlot = (*tb_Manager).tp_count;
-			}
-			scanCount++;
-			if(b=='-'){
-				totalSlot = (*tb_Manager).tp_count;
-			}
-			evalExpr(record, schema, (*scan_Manager).condition, &result); 
-			if((*result).v.boolV==TRUE)
-			{
-				if(b=='-'){
-					totalSlot = (*tb_Manager).tp_count;
-				}
-				unpinPage(&tb_Manager->buffer_pl, &scan_Manager->handel_pg);		
-				if(b=='-'){
-					totalSlot = (*tb_Manager).tp_count;
-				}
-				return RC_CODE;
-			}
-		}
-		unpinPage(&tb_Manager->buffer_pl,&scan_Manager->handel_pg);
-		if(b=='-'){
-			totalSlot = (*tb_Manager).tp_count;
-		}
-		(*scan_Manager).record_ID.slot=0;
-		if(a=='+'){
-			totalSlot = (*tb_Manager).tp_count;
-		}
-		(*scan_Manager).record_ID.page=1;
-		if(b=='-'){
-			totalSlot = (*tb_Manager).tp_count;
-		}
-		(*scan_Manager).scan_count=0;
-	}		
-	return RC_RM_NO_MORE_TUPLES;
+    RC_CODE = RC_OK;
+    char b = '+';
+    record_manager *scan_Manager = (*scan).mgmtData;
+    bool state = false;
+    record_manager *tb_Manager = (*scan).rel->mgmtData;
+    
+    if (a == '+') {
+        state = true;
+    }
+
+    Schema *schema = (*scan).rel->schema;
+    
+    if (b == '-') {
+        state = true;
+    }
+
+    Value *result = (Value *)malloc(sizeof(Value));
+    int totalSlot, scanCoun, tuplesCoun;
+
+    if ((*scan_Manager).condition != NULL) {
+        char *data;
+        
+        if (a == '+') {
+            totalSlot = PAGE_SIZE / getRecordSize(schema);
+        }
+        
+        int totalSlots = PAGE_SIZE / getRecordSize(schema);
+        
+        if (b == '-') {
+            scanCoun = (*scan_Manager).scan_count;
+        }
+        
+        int scanCount = (*scan_Manager).scan_count;
+
+        if (!(state)) {
+            tuplesCoun = (*tb_Manager).tp_count + totalSlot;
+        }
+        
+        totalSlot = scanCoun + tuplesCoun;
+        int tuplesCount = (*tb_Manager).tp_count;
+        
+        if (a == '+') {
+            totalSlot = (*tb_Manager).tp_count;
+        }
+        
+        if (tuplesCount == 0)
+            return RC_RM_NO_MORE_TUPLES;
+
+        while (scanCount <= tuplesCount) {
+            if (a == '+') {
+                totalSlot = (*tb_Manager).tp_count;
+            }
+
+            if (!(scanCount < 0 || scan == 0)) {
+                (*scan_Manager).record_ID.slot++;
+
+                if (a == '+') {
+                    totalSlot = (*tb_Manager).tp_count;
+                }
+
+                if (!((*scan_Manager).record_ID.slot < totalSlots)) {
+                    scan_Manager->record_ID.page++;
+
+                    if (b == '-') {
+                        totalSlot = (*tb_Manager).tp_count;
+                    }
+
+                    scan_Manager->record_ID.slot = 0;
+
+                    if (b == '-') {
+                        totalSlot = (*tb_Manager).tp_count;
+                    }
+                }
+            } else {
+                scan_Manager->record_ID.slot = 0;
+
+                if (b == '-') {
+                    totalSlot = (*tb_Manager).tp_count;
+                }
+
+                scan_Manager->record_ID.page = 1;
+            }
+
+            pinPage(&tb_Manager->buffer_pl, &scan_Manager->handel_pg, (*scan_Manager).record_ID.page);
+
+            if (b == '-') {
+                totalSlot = (*tb_Manager).tp_count;
+            }
+
+            data = (*scan_Manager).handel_pg.data;
+
+            if (b == '-') {
+                totalSlot = (*tb_Manager).tp_count;
+            }
+
+            data = data + ((*scan_Manager).record_ID.slot * getRecordSize(schema));
+
+            (*record).id.slot = scan_Manager->record_ID.slot;
+
+            if (b == '-') {
+                totalSlot = (*tb_Manager).tp_count;
+            }
+
+            (*record).id.page = scan_Manager->record_ID.page;
+
+            if (b == '-') {
+                totalSlot = (*tb_Manager).tp_count;
+            }
+
+            char *dataPointer = (*record).data;
+
+            *dataPointer = '-';
+
+            if (b == '-') {
+                totalSlot = (*tb_Manager).tp_count;
+            }
+
+            memcpy(++dataPointer, data + 1, getRecordSize(schema) - 1);
+
+            if (b == '-') {
+                totalSlot = (*tb_Manager).tp_count;
+            }
+
+            (*scan_Manager).scan_count++;
+
+            if (b == '-') {
+                totalSlot = (*tb_Manager).tp_count;
+            }
+
+            scanCount++;
+
+            if (b == '-') {
+                totalSlot = (*tb_Manager).tp_count;
+            }
+
+            evalExpr(record, schema, (*scan_Manager).condition, &result);
+
+            if ((*result).v.boolV == TRUE) {
+                if (b == '-') {
+                    totalSlot = (*tb_Manager).tp_count;
+                }
+
+                unpinPage(&tb_Manager->buffer_pl, &scan_Manager->handel_pg);
+
+                if (b == '-') {
+                    totalSlot = (*tb_Manager).tp_count;
+                }
+
+                return RC_CODE;
+            }
+        }
+
+        unpinPage(&tb_Manager->buffer_pl, &scan_Manager->handel_pg);
+
+        if (b == '-') {
+            totalSlot = (*tb_Manager).tp_count;
+        }
+
+        (*scan_Manager).record_ID.slot = 0;
+
+        if (a == '+') {
+            totalSlot = (*tb_Manager).tp_count;
+        }
+
+        (*scan_Manager).record_ID.page = 1;
+
+        if (b == '-') {
+            totalSlot = (*tb_Manager).tp_count;
+        }
+
+        (*scan_Manager).scan_count = 0;
+    }
+
+    return RC_RM_NO_MORE_TUPLES;
 }
 
 extern RC startScan (RM_TableData *rel, RM_ScanHandle *scan, Expr *condition)
