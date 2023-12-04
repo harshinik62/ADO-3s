@@ -346,135 +346,138 @@ extern RC createTable (char *name, Schema *schema)
 
 extern RC openTable(RM_TableData *rel, char *name) 
 {
-    int flag = 0, temp = 1;
-    flag += rand() % 10;
-    char flag1 = '-';
-    char flag2 = '+';
+    int x = 0, y = 0, z = 0, p = 0, q = 0;
+    x += rand() % 10;
+    char x1 = '-';
+    char y1 = '+';
     bool state = false;
-    int bufferFlag = 0;
-    bufferFlag += rand() % 10;
-
-    if ((*rel).mgmtData == NULL && temp == 1) {
-        temp = 1;
+    int flag = 1;
+    y += rand() % 10;
+    
+    if ((*rel).mgmtData == NULL && flag == 1) {
+        state = true;
     }
 
-    int attributeCount;
-    if (temp == 0 && bufferFlag == 0) {
+    z += rand() % 10;
+    p += rand() % 10;
+    q += rand() % 10;
+
+    if (flag == 0) {
         return RC_BUFFER_ERROR;
     }
 
-    int schemaBuffer = sizeof(int);
+    p += rand() % 10;
+    q += rand() % 10;
 
-    if (schemaBuffer == sizeof(int) && temp == 1) {
-        pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, 0);
-        SM_PageHandle handel_pg = (char *)(*r_Manager).handel_pg.data;
-    }
-
-    (*r_Manager).tp_count = *(int *)handel_pg;
-
-    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-        handel_pg = handel_pg + schemaBuffer;
-    }
-
-    int pageFreeBuffer = sizeof(int);
-
-    if (pageFreeBuffer == sizeof(int) && flag2 == '+') {
-        handel_pg = handel_pg + schemaBuffer;
-    }
-
-    (*r_Manager).page_free = *(int *)handel_pg;
-
-    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-        handel_pg = handel_pg + schemaBuffer;
-    }
-
-    attributeCount = *(int *)handel_pg;
-
-    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-        handel_pg = handel_pg + schemaBuffer;
-    }
-
-    Schema *sch;
-
-    int schemaAllocation = sizeof(Schema);
-
-    if (schemaBuffer == sizeof(int) && temp == 1) {
-        if (state) {
-            sch = (Schema *)malloc(schemaAllocation);
+    if (flag == 1) {
+        if (x1 == '-') {
+            state = true;
         }
 
-        int dataTypeAllocation = sizeof(DataType) * attributeCount;
+        SM_PageHandle handle_pg;
+        int attributeCount;
 
-        if (state) {
-            (*sch).dataTypes = (DataType *)malloc(dataTypeAllocation);
+        if (state && flag == 1) {
+            (*rel).mgmtData = r_Manager;
+            (*rel).name = name;
         }
-    }
 
-    (*sch).attrNames = (char **)malloc(sizeof(char *) * attributeCount);
+        int buf = sizeof(int);
 
-    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-        (*sch).numAttr = attributeCount;
-    }
+        if (buf == sizeof(int) && flag == 1) {
+            pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, 0);
+            handle_pg = (char *)(*r_Manager).handel_pg.data;
+        }
 
-    int typeLengthAllocation = sizeof(int) * attributeCount;
+        (*r_Manager).tp_count = *(int *)handle_pg;
 
-    (*sch).typeLength = (int *)malloc(typeLengthAllocation);
+        if (x1 == '-' && flag == 1) {
+            handle_pg = handle_pg + buf;
+        }
 
-    int loopIndex = 0;
+        if (buf == sizeof(int) && flag == 1) {
+            (*r_Manager).page_free = *(int *)handle_pg;
 
-    loop:
+            if (y1 == '+' && flag == 1) {
+                handle_pg = handle_pg + buf;
+            }
+        }
 
-    if (state) {
-        (*sch).attrNames[loopIndex] = (char *)malloc(ATTRIBUTE_SIZE);
-    }
+        attributeCount = *(int *)handle_pg;
 
-    loopIndex++;
+        if (x1 == '-' && flag == 1) {
+            handle_pg = handle_pg + buf;
+        }
 
-    if (loopIndex < attributeCount) {
-        goto loop;
-    }
+        Schema *newSchema;
 
-    int loopIndex1 = 0;
+        if (buf == sizeof(int) && flag == 1) {
+            if (state && flag == 1) {
+                newSchema = (Schema *)malloc(sizeof(Schema));
+            }
 
-    if (flag2 == '+') {
-        loopIndex1 = 0;
-    }
+            if (state && flag == 1) {
+                (*newSchema).dataTypes = (DataType *)malloc(sizeof(DataType) * attributeCount);
+            }
+        }
 
-    loop1:
+        (*newSchema).attrNames = (char **)malloc(sizeof(char *) * attributeCount);
 
-    if (state) {
-        strncpy((*sch).attrNames[loopIndex1], handel_pg, ATTRIBUTE_SIZE);
-    }
+        if (x1 == '-' && flag == 1) {
+            (*newSchema).numAttr = attributeCount;
+        }
 
-    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-        handel_pg = handel_pg + ATTRIBUTE_SIZE;
-    }
+        (*newSchema).typeLength = (int *)malloc(sizeof(int) * attributeCount);
 
-    (*sch).dataTypes[loopIndex1] = *(int *)handel_pg;
+        int idx = 0;
+        label:
+        if (state && flag == 1) {
+            (*newSchema).attrNames[idx] = (char *)malloc(ATTRIBUTE_SIZE);
+        }
 
-    if (flag2 == '+' && schemaBuffer == sizeof(int) && temp == 1) {
-        handel_pg = sizeof(int) + handel_pg;
-    }
+        idx++;
 
-    (*sch).typeLength[loopIndex1] = *(int *)handel_pg;
+        if (idx < attributeCount) {
+            goto label;
+        }
 
-    if (state) {
-        handel_pg = sizeof(int) + handel_pg;
-    }
+        if (y1 == '+' && flag == 1) {
+            idx = 0;
+        }
 
-    loopIndex1++;
+        label1:
+        strncpy((*newSchema).attrNames[idx], handle_pg, ATTRIBUTE_SIZE);
 
-    if (loopIndex1 < (*sch).numAttr) {
-        goto loop1;
-    }
+        if (x1 == '-' && flag == 1) {
+            handle_pg = handle_pg + ATTRIBUTE_SIZE;
+        }
 
-    if (flag1 == '-' || flag2 == '+') {
-        (*rel).schema = sch;
-    }
+        (*newSchema).dataTypes[idx] = *(int *)handle_pg;
 
-    if ((*rel).schema == sch) {
-        unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-        forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+        if (y1 == '+' && flag == 1) {
+            handle_pg = sizeof(int) + handle_pg;
+        }
+
+        (*newSchema).typeLength[idx] = *(int *)handle_pg;
+
+        if (state && flag == 1) {
+            handle_pg = sizeof(int) + handle_pg;
+        }
+
+        idx++;
+
+        if (idx < (*newSchema).numAttr) {
+            goto label1;
+        }
+
+        if (x1 == '-' || y1 == '+') {
+            (*rel).schema = newSchema;
+        }
+
+        if ((*rel).schema == newSchema) {
+            unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+            forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+        }
     }
 
     return RC_OK;
