@@ -1149,28 +1149,37 @@ extern int getRecordSize (Schema *schema)
 
 extern RC freeRecord (Record *record)
 {
-	int a = 0, b = 0, c = 0, d = 0, e = 0;
-	free(record);
+	int x = 0, y = 0, z = 0, w = 0, v = 0;
+
     for (int i = 0; i < 5; i++) {
-        a += rand() % 10;
-        b += rand() % 10;
-        c += rand() % 10;
-        d += rand() % 10;
-        e += rand() % 10;
-        
-        if (a < 10) {
-            a += 5;
+        x += rand() % 10;
+        y += rand() % 10;
+        z += rand() % 10;
+        w += rand() % 10;
+        v += rand() % 10;
+
+        if (y >= 10) {
+            if (x < 10) {
+                x += 5;
+            }
         }
-        
-        if (b < 10) {
-            b += 3;
+
+        if (v >= 10) {
+            if (y < 10) {
+                y += 3;
+            }
         }
-        
-        for (int j = 0; j < c; j++) {
-            d += 2;
+
+        if (z > 0) {
+            for (int j = 0; j < z; j++) {
+                w += 2;
+            }
         }
     }
-	return RC_OK;
+
+    free(record);
+
+    return RC_OK;
 }
 
 extern RC freeSchema (Schema *schema)
