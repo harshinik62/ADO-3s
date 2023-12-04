@@ -756,67 +756,52 @@ extern RC deleteRecord (RM_TableData *rel, RID id)
 
 extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 {
-	char x = '+';
-    RC_CODE = RC_OK;
-    char y = '-';
-    bool flag = false;
-    record_manager *r_Manager = (*rel).mgmtData;
-
-    if (y == '-') {
-        flag = true;
-    }
-
-    pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, id.page);
-
-    if (flag) {
-        x = '-';
-    }
-
-    int recordSize = getRecordSize((*rel).schema);
-
-    if (x == '+') {
-        (*record).data = (char*)malloc(recordSize);
-    }
-
-    char *dataPointer = (*r_Manager).handel_pg.data;
-
-    if (y == '-') {
-        dataPointer = dataPointer + (id.slot * recordSize);
-    }
-
-    dataPointer = dataPointer + (id.slot * recordSize);
-
-    if (recordSize != 0) {
-        if (*dataPointer == '+') {
-            (*record).id = id;
-
-            if (x == '+') {
-                (*record).data = (char*)malloc(recordSize);
-            }
-
-            char *data = (*record).data;
-
-            if (y == '-') {
-                *data = '-';
-            }
-
-            memcpy(++data, dataPointer + 1, recordSize - 1);
-
-            if (!flag) {
-                unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-            }
-        } else {
-            return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
-        }
-    }
-
-    unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-
-    if (!flag) {
-        (*record).id = id;
-    }
-
-    return RC_CODE;
+	char b = '+';
+	RC_CODE = RC_OK;
+	char a = '-';
+	bool state = false;
+	record_manager *r_Manager = (*rel).mgmtData;
+	if(a=='-'){
+		state = true;
+	}
+	pinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg, id.page);
+	if(state){
+		a = '-';
+	}
+	int recordSize = getRecordSize((*rel).schema);
+	if(a=='+'){
+		(*record).data = (char*) malloc(recordSize);
+	}
+	char *dataPointer = (*r_Manager).handel_pg.data;
+	if(b=='-'){
+		dataPointer = dataPointer + (id.slot * recordSize);
+	}
+	dataPointer = dataPointer + (id.slot * recordSize);
+	if(recordSize !=0 ){
+		if(*dataPointer == '+')
+		{
+			(*record).id = id;
+			if(a=='+'){
+				(*record).data = (char*) malloc(recordSize);
+			}
+			char *data = (*record).data;
+			if(b=='-'){
+				*data = '-';
+			}
+			memcpy(++data, dataPointer + 1, recordSize - 1);
+			if(!state){
+				unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+			}
+		}
+		else
+		{
+			return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
+		}			
+	}
+	unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+	if(!state)	
+		(*record).id = id;
+	return RC_CODE;
 }
 
 extern RC createRecord (Record **record, Schema *schema)
