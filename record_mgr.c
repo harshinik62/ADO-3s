@@ -344,141 +344,142 @@ extern RC createTable (char *name, Schema *schema)
 	return RC_OK;
 }
 
-extern RC openTable (RM_TableData *rel, char *name)
+extern RC openTable(RM_TableData *rel, char *name) 
 {
-	int flag = 0, temp = 1;
-	flag += rand() % 10;
-	char flag1 = '-';
-	char flag2 = '+';
-	bool state = false;
-	int bufferFlag = 0;
-	bufferFlag += rand() % 10;
+    int flag = 0, temp = 1;
+    flag += rand() % 10;
+    char flag1 = '-';
+    char flag2 = '+';
+    bool state = false;
+    int bufferFlag = 0;
+    bufferFlag += rand() % 10;
 
-	if ((*rel).mgmtData == NULL && temp == 1) {
-		temp = 1;
-	}
+    if ((*rel).mgmtData == NULL && temp == 1) {
+        temp = 1;
+    }
 
-	int attributeCount;
-	if (temp == 0 && bufferFlag == 0) {
-		return RC_BUFFER_ERROR;
-	}
+    int attributeCount;
+    if (temp == 0 && bufferFlag == 0) {
+        return RC_BUFFER_ERROR;
+    }
 
-	int schemaBuffer = sizeof(int);
+    int schemaBuffer = sizeof(int);
 
-	if (schemaBuffer == sizeof(int) && temp == 1) {
-		pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, 0);
-		SM_PageHandle handel_pg = (char *)(*r_Manager).handel_pg.data;
-	}
+    if (schemaBuffer == sizeof(int) && temp == 1) {
+        pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, 0);
+        SM_PageHandle handel_pg = (char *)(*r_Manager).handel_pg.data;
+    }
 
-	(*r_Manager).tp_count = *(int *)handel_pg;
+    (*r_Manager).tp_count = *(int *)handel_pg;
 
-	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-		handel_pg = handel_pg + schemaBuffer;
-	}
+    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+        handel_pg = handel_pg + schemaBuffer;
+    }
 
-	int pageFreeBuffer = sizeof(int);
+    int pageFreeBuffer = sizeof(int);
 
-	if (pageFreeBuffer == sizeof(int) && flag2 == '+') {
-		handel_pg = handel_pg + schemaBuffer;
-	}
+    if (pageFreeBuffer == sizeof(int) && flag2 == '+') {
+        handel_pg = handel_pg + schemaBuffer;
+    }
 
-	(*r_Manager).page_free = *(int *)handel_pg;
+    (*r_Manager).page_free = *(int *)handel_pg;
 
-	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-		handel_pg = handel_pg + schemaBuffer;
-	}
+    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+        handel_pg = handel_pg + schemaBuffer;
+    }
 
-	attributeCount = *(int *)handel_pg;
+    attributeCount = *(int *)handel_pg;
 
-	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-		handel_pg = handel_pg + schemaBuffer;
-	}
+    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+        handel_pg = handel_pg + schemaBuffer;
+    }
 
-	Schema *sch;
+    Schema *sch;
 
-	int schemaAllocation = sizeof(Schema);
+    int schemaAllocation = sizeof(Schema);
 
-	if (schemaBuffer == sizeof(int) && temp == 1) {
-		if (state) {
-			sch = (Schema *)malloc(schemaAllocation);
-		}
+    if (schemaBuffer == sizeof(int) && temp == 1) {
+        if (state) {
+            sch = (Schema *)malloc(schemaAllocation);
+        }
 
-		int dataTypeAllocation = sizeof(DataType) * attributeCount;
+        int dataTypeAllocation = sizeof(DataType) * attributeCount;
 
-		if (state) {
-			(*sch).dataTypes = (DataType *)malloc(dataTypeAllocation);
-		}
-	}
+        if (state) {
+            (*sch).dataTypes = (DataType *)malloc(dataTypeAllocation);
+        }
+    }
 
-	(*sch).attrNames = (char **)malloc(sizeof(char *) * attributeCount);
+    (*sch).attrNames = (char **)malloc(sizeof(char *) * attributeCount);
 
-	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-		(*sch).numAttr = attributeCount;
-	}
+    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+        (*sch).numAttr = attributeCount;
+    }
 
-	int typeLengthAllocation = sizeof(int) * attributeCount;
+    int typeLengthAllocation = sizeof(int) * attributeCount;
 
-	(*sch).typeLength = (int *)malloc(typeLengthAllocation);
+    (*sch).typeLength = (int *)malloc(typeLengthAllocation);
 
-	int loopIndex = 0;
+    int loopIndex = 0;
 
-	loop:
+    loop:
 
-	if (state) {
-		(*sch).attrNames[loopIndex] = (char *)malloc(ATTRIBUTE_SIZE);
-	}
+    if (state) {
+        (*sch).attrNames[loopIndex] = (char *)malloc(ATTRIBUTE_SIZE);
+    }
 
-	loopIndex++;
+    loopIndex++;
 
-	if (loopIndex < attributeCount) {
-		goto loop;
-	}
+    if (loopIndex < attributeCount) {
+        goto loop;
+    }
 
-	int loopIndex1 = 0;
+    int loopIndex1 = 0;
 
-	if (flag2 == '+') {
-		loopIndex1 = 0;
-	}
+    if (flag2 == '+') {
+        loopIndex1 = 0;
+    }
 
-	loop1:
+    loop1:
 
-	if (state) {
-		strncpy((*sch).attrNames[loopIndex1], handel_pg, ATTRIBUTE_SIZE);
-	}
+    if (state) {
+        strncpy((*sch).attrNames[loopIndex1], handel_pg, ATTRIBUTE_SIZE);
+    }
 
-	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
-		handel_pg = handel_pg + ATTRIBUTE_SIZE;
-	}
+    if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+        handel_pg = handel_pg + ATTRIBUTE_SIZE;
+    }
 
-	(*sch).dataTypes[loopIndex1] = *(int *)handel_pg;
+    (*sch).dataTypes[loopIndex1] = *(int *)handel_pg;
 
-	if (flag2 == '+' && schemaBuffer == sizeof(int) && temp == 1) {
-		handel_pg = sizeof(int) + handel_pg;
-	}
+    if (flag2 == '+' && schemaBuffer == sizeof(int) && temp == 1) {
+        handel_pg = sizeof(int) + handel_pg;
+    }
 
-	(*sch).typeLength[loopIndex1] = *(int *)handel_pg;
+    (*sch).typeLength[loopIndex1] = *(int *)handel_pg;
 
-	if (state) {
-		handel_pg = sizeof(int) + handel_pg;
-	}
+    if (state) {
+        handel_pg = sizeof(int) + handel_pg;
+    }
 
-	loopIndex1++;
+    loopIndex1++;
 
-	if (loopIndex1 < (*sch).numAttr) {
-		goto loop1;
-	}
+    if (loopIndex1 < (*sch).numAttr) {
+        goto loop1;
+    }
 
-	if (flag1 == '-' || flag2 == '+') {
-		(*rel).schema = sch;
-	}
+    if (flag1 == '-' || flag2 == '+') {
+        (*rel).schema = sch;
+    }
 
-	if ((*rel).schema == sch) {
-		unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-		forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-	}
+    if ((*rel).schema == sch) {
+        unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+        forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+    }
 
-	return RC_OK;
-}   
+    return RC_OK;
+}
+
 
 extern int getNumTuples (RM_TableData *rel)
 {
