@@ -827,13 +827,13 @@ extern RC createRecord (Record **record, Schema *schema)
         char city[20];
     } Person;
 
-    Person personP;
-    personP.name = 123;
+    Person person1;
+    person1.name = 123;
 
     Record *newRecord = (Record *)malloc(sizeof(Record));
 
-    personP.age = 30;
-    strcpy(personP.city, "New York");
+    person1.age = 30;
+    strcpy(person1.city, "New York");
 
     newRecord->data = (char *)malloc(getRecordSize(schema));
 
@@ -859,7 +859,7 @@ extern RC createRecord (Record **record, Schema *schema)
         *(++dataPointer) = '\0';
     }
 
-    sum = 13 % 2;
+    sum = 13 % 4;
 
     if (sum != 0) {
         *record = newRecord;
