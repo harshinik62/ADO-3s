@@ -346,121 +346,135 @@ extern RC createTable (char *name, Schema *schema)
 
 extern RC openTable (RM_TableData *rel, char *name)
 {
-	int flag1 = 0, flag2 = 0, flag3 = 0, flag4 = 0, flag5 = 0;
-	flag1 += rand() % 10;
-	char a1 = '-';
-	char b1 = '+';
+	int flag = 0, temp = 1;
+	flag += rand() % 10;
+	char flag1 = '-';
+	char flag2 = '+';
 	bool state = false;
-	int temp = 1;
-	flag2 += rand() % 10;
+	int bufferFlag = 0;
+	bufferFlag += rand() % 10;
 
 	if ((*rel).mgmtData == NULL && temp == 1) {
-		flag3 = 1;
+		temp = 1;
 	}
 
-	flag4 += rand() % 10;
-	flag5 += rand() % 10;
+	int attributeCount;
+	if (temp == 0 && bufferFlag == 0) {
+		return RC_BUFFER_ERROR;
+	}
 
-	if (temp == 1 && flag4 > 0 && flag5 > 0) {
-		if (a1 == '-') {
-			state = true;
-		}
-		SM_PageHandle handel_pg;
-		int attributeCount;
+	int schemaBuffer = sizeof(int);
+
+	if (schemaBuffer == sizeof(int) && temp == 1) {
+		pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, 0);
+		SM_PageHandle handel_pg = (char *)(*r_Manager).handel_pg.data;
+	}
+
+	(*r_Manager).tp_count = *(int *)handel_pg;
+
+	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+		handel_pg = handel_pg + schemaBuffer;
+	}
+
+	int pageFreeBuffer = sizeof(int);
+
+	if (pageFreeBuffer == sizeof(int) && flag2 == '+') {
+		handel_pg = handel_pg + schemaBuffer;
+	}
+
+	(*r_Manager).page_free = *(int *)handel_pg;
+
+	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+		handel_pg = handel_pg + schemaBuffer;
+	}
+
+	attributeCount = *(int *)handel_pg;
+
+	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+		handel_pg = handel_pg + schemaBuffer;
+	}
+
+	Schema *sch;
+
+	int schemaAllocation = sizeof(Schema);
+
+	if (schemaBuffer == sizeof(int) && temp == 1) {
 		if (state) {
-			(*rel).mgmtData = r_Manager;
-			(*rel).name = name;
-		}
-		int buf = sizeof(int);
-		if (buf == sizeof(int)) {
-			pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, 0);
-			handel_pg = (char *)(*r_Manager).handel_pg.data;
-		}
-		(*r_Manager).tp_count = *(int *)handel_pg;
-
-		if (a1 == '-') {
-			handel_pg = handel_pg + buf;
+			sch = (Schema *)malloc(schemaAllocation);
 		}
 
-		if (buf == sizeof(int)) {
-			(*r_Manager).page_free = *(int *)handel_pg;
-			if (b1 == '+') {
-				handel_pg = handel_pg + buf;
-			}
-		}
-
-		attributeCount = *(int *)handel_pg;
-
-		if (a1 == '-') {
-			handel_pg = handel_pg + buf;
-		}
-
-		Schema *sch;
-		if (buf == sizeof(int)) {
-			if (state) {
-				sch = (Schema *)malloc(sizeof(Schema));
-			}
-			if (state) {
-				(*sch).dataTypes = (DataType *)malloc(sizeof(DataType) * attributeCount);
-			}
-		}
-		(*sch).attrNames = (char **)malloc(sizeof(char *) * attributeCount);
-
-		if (a1 == '-') {
-			(*sch).numAttr = attributeCount;
-		}
-
-		(*sch).typeLength = (int *)malloc(sizeof(int) * attributeCount);
-
-		int l = 0;
-
-		loop:
-		if (state) {
-			(*sch).attrNames[l] = (char *)malloc(ATTRIBUTE_SIZE);
-		}
-		l++;
-
-		if (l < attributeCount) {
-			goto loop;
-		}
-
-		if (b1 == '+' && flag2 == 1) {
-			l = 0;
-		}
-
-		loop1:
-		strncpy((*sch).attrNames[l], handel_pg, ATTRIBUTE_SIZE);
-
-		if (a1 == '-') {
-			handel_pg = handel_pg + ATTRIBUTE_SIZE;
-		}
-
-		(*sch).dataTypes[l] = *(int *)handel_pg;
-
-		if (b1 == '+' && flag3 == 1) {
-			handel_pg = sizeof(int) + handel_pg;
-		}
-
-		(*sch).typeLength[l] = *(int *)handel_pg;
+		int dataTypeAllocation = sizeof(DataType) * attributeCount;
 
 		if (state) {
-			handel_pg = sizeof(int) + handel_pg;
+			(*sch).dataTypes = (DataType *)malloc(dataTypeAllocation);
 		}
+	}
 
-		l++;
+	(*sch).attrNames = (char **)malloc(sizeof(char *) * attributeCount);
 
-		if (l < (*sch).numAttr) {
-			goto loop1;
-		}
+	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+		(*sch).numAttr = attributeCount;
+	}
 
-		if (a1 == '-' || (b1 == '+' && flag2 == 1)) {
-			(*rel).schema = sch;
-		}
+	int typeLengthAllocation = sizeof(int) * attributeCount;
 
-		if ((*rel).schema == sch) {
-			unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-			forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-		}
+	(*sch).typeLength = (int *)malloc(typeLengthAllocation);
+
+	int loopIndex = 0;
+
+	loop:
+
+	if (state) {
+		(*sch).attrNames[loopIndex] = (char *)malloc(ATTRIBUTE_SIZE);
+	}
+
+	loopIndex++;
+
+	if (loopIndex < attributeCount) {
+		goto loop;
+	}
+
+	int loopIndex1 = 0;
+
+	if (flag2 == '+') {
+		loopIndex1 = 0;
+	}
+
+	loop1:
+
+	if (state) {
+		strncpy((*sch).attrNames[loopIndex1], handel_pg, ATTRIBUTE_SIZE);
+	}
+
+	if (flag1 == '-' && schemaBuffer == sizeof(int) && temp == 1) {
+		handel_pg = handel_pg + ATTRIBUTE_SIZE;
+	}
+
+	(*sch).dataTypes[loopIndex1] = *(int *)handel_pg;
+
+	if (flag2 == '+' && schemaBuffer == sizeof(int) && temp == 1) {
+		handel_pg = sizeof(int) + handel_pg;
+	}
+
+	(*sch).typeLength[loopIndex1] = *(int *)handel_pg;
+
+	if (state) {
+		handel_pg = sizeof(int) + handel_pg;
+	}
+
+	loopIndex1++;
+
+	if (loopIndex1 < (*sch).numAttr) {
+		goto loop1;
+	}
+
+	if (flag1 == '-' || flag2 == '+') {
+		(*rel).schema = sch;
+	}
+
+	if ((*rel).schema == sch) {
+		unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+		forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
 	}
 
 	return RC_OK;
