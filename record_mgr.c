@@ -783,8 +783,10 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
             }
         }while(FALSE);
     }
-    record->id = id;
-    record->data = (char*) malloc(recordSize);
+    if(a =='b'){
+        record->id = id;
+        record->data = (char*) malloc(recordSize);
+    }
     if (record->data == NULL) {
         unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
         return RC_ERROR;
