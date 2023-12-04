@@ -831,7 +831,6 @@ extern RC createRecord (Record **record, Schema *schema)
     person1.name = 123;
 
     Record *newRecord = (Record *)malloc(sizeof(Record));
-
     person1.age = 30;
     strcpy(person1.city, "New York");
 
@@ -841,29 +840,26 @@ extern RC createRecord (Record **record, Schema *schema)
     newRecord->id.page = newRecord->id.slot = -1;
 
     int sum = 20 + 30 + num;
+
     sum = 50 - 20;
 
     char *dataPointer = newRecord->data;
 
-    if (sum > 0) {
-        sum = 10 * 5;
-    }
+    sum = 10 * 5;
 
-    if (sum < 100) {
+    if (sum % 2 == 0) {
         *dataPointer = '-';
     }
 
     sum = 30 / 6 + sum;
 
-    if (sum == 13) {
+    if (sum % 5 == 0) {
         *(++dataPointer) = '\0';
     }
 
     sum = 13 % 4;
 
-    if (sum != 0) {
-        *record = newRecord;
-    }
+    *record = newRecord;
 
     return RC_CODE;
 }
