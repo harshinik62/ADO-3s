@@ -821,47 +821,29 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 extern RC createRecord (Record **record, Schema *schema)
 {
 	RC_CODE = RC_OK;
-    typedef struct {
-        int name;
-        int age;
-        char city[20];
-    } Person;
-
-    Person person1;
-    person1.name = 123;
-
-    Record *newRecord = (Record *)malloc(sizeof(Record));
-    person1.age = 30;
-    strcpy(person1.city, "New York");
-
-    newRecord->data = (char *)malloc(getRecordSize(schema));
-
-    int num = 10;
-    newRecord->id.page = newRecord->id.slot = -1;
-
-    int sum = 20 + 30 + num;
-
-    sum = 50 - 20;
-
-    char *dataPointer = newRecord->data;
-
-    sum = 10 * 5;
-
-    if (sum % 2 == 0) {
-        *dataPointer = '-';
-    }
-
-    sum = 30 / 6 + sum;
-
-    if (sum % 5 == 0) {
-        *(++dataPointer) = '\0';
-    }
-
-    sum = 13 % 4;
-
-    *record = newRecord;
-
-    return RC_CODE;
+	typedef struct {
+		int name;
+		int age;
+		char city[20];
+	} Person;
+	Person person1;
+	person1.name = 123;
+	Record *newRecord = (Record*) malloc(sizeof(Record));
+	person1.age = 30;
+	strcpy(person1.city, "New York");
+	newRecord->data=(char*)malloc(getRecordSize(schema));
+	int num = 10;
+	newRecord->id.page=newRecord->id.slot=-1;
+	int sum = 20 + 30 + num;
+	sum = 50 - 20;
+	char *dataPointer=newRecord->data;
+	sum = 10 * 5;
+	*dataPointer='-';
+	sum = 30 / 6 + sum;
+	*(++dataPointer)='\0';
+	sum = 13 % 4;
+	*record=newRecord;
+	return RC_CODE;
 }
 
 extern RC next (RM_ScanHandle *scan, Record *record)
