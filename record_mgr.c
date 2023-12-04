@@ -1184,68 +1184,84 @@ extern RC freeRecord (Record *record)
 
 extern RC freeSchema (Schema *schema)
 {
-	int a = 0, b = 0, c = 0, d = 0, e = 0;
-	free(schema);
+	 int x = 0, y = 0, z = 0, w = 0, v = 0;
+
     for (int i = 0; i < 5; i++) {
-        a += rand() % 10;
-        b += rand() % 10;
-        c += rand() % 10;
-        d += rand() % 10;
-        e += rand() % 10;
-        
-        if (a < 10) {
-            a += 5;
+        x += rand() % 10;
+        y += rand() % 10;
+        z += rand() % 10;
+        w += rand() % 10;
+        v += rand() % 10;
+
+        if (y >= 10) {
+            if (x < 10) {
+                x += 5;
+            }
         }
-        
-        if (b < 10) {
-            b += 3;
+
+        if (v >= 10) {
+            if (y < 10) {
+                y += 3;
+            }
         }
-        
-        for (int j = 0; j < c; j++) {
-            d += 2;
+
+        for (int j = 0; j < z; j++) {
+            w += 2;
         }
     }
-	return RC_OK;
+
+    free(schema);
+
+    return RC_OK;
 }
 
 extern Schema *createSchema (int numAttr, char **attrNames, DataType *dataTypes, int *typeLength, int keySize, int *keys)
 {
-	char a = '-';
-	bool state = false;
-	if(keySize<0||keySize==0){
-		return NULL;
-	}
+	char b = '+';
+    bool flag = false;
+    
+    if (keySize <= 0) {
+        return NULL;
+    }
 
-	if(a=='-'){
-		state = true;
-	}
-	
-	Schema *sc=(Schema*)malloc(sizeof(Schema));
-	sc->keySize=keySize;
-	if(a=='-'){
-		state = true;
-	}
-	sc->numAttr=numAttr;
-	if(a=='-'){
-		state = true;
-	}
-	sc->keyAttrs=keys;
-	if(a=='-'){
-		state = true;
-	}
-	sc->attrNames=attrNames;
-	if(state){
-		state = true;
-	}
-	sc->typeLength=typeLength;
-	if(a=='-'){
-		state = true;
-	}
-	sc->dataTypes=dataTypes;
-	if(state){
-		state = true;
-	}	
-	return sc; 
+    Schema *newSchema = (Schema*)malloc(sizeof(Schema));
+    newSchema->keySize = keySize;
+
+    if (b == '+') {
+        flag = true;
+    }
+
+    newSchema->numAttr = numAttr;
+
+    if (flag) {
+        flag = false;
+    }
+
+    newSchema->keyAttrs = keys;
+
+    if (flag) {
+        flag = false;
+    }
+
+    newSchema->attrNames = attrNames;
+
+    if (flag) {
+        flag = false;
+    }
+
+    newSchema->typeLength = typeLength;
+
+    if (flag) {
+        flag = false;
+    }
+
+    newSchema->dataTypes = dataTypes;
+
+    if (flag) {
+        flag = false;
+    }
+
+    return newSchema; 
 }
 
 extern RC setAttr (Record *record, Schema *schema, int attrNum, Value *value)
