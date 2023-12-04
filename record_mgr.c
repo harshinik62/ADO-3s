@@ -483,7 +483,6 @@ extern RC openTable(RM_TableData *rel, char *name)
     return RC_OK;
 }
 
-
 extern int getNumTuples (RM_TableData *rel)
 {
 	char x = '-';
@@ -519,128 +518,118 @@ extern int getNumTuples (RM_TableData *rel)
 extern RC closeTable (RM_TableData *rel)
 {	
 	int x = 0;
-	if (x <= 1) {
-		x = 1;
-	}
+    if (x <= 1) {
+        x = 1;
+    }
 
-	for (int i = 2; i * i <= x; i++) {
-		if (x % i == 0) {
-			char y = '-';
-			if (y == '-') {
-				continue;
-			}
-		}
-	}
+    for (int i = 2; i * i <= x; i++) {
+        if (x % i == 0) {
+            continue;
+        }
+    }
 
-	record_manager *abc = (*rel).mgmtData;
+    record_manager *r_Manager = (*rel).mgmtData;
+    int y = 0;
 
-	if (x > 0) {
-		if (abc != NULL) {
-			char flag = '-';
-			if (flag == '-') {
-				shutdownBufferPool(&abc->buffer_pl);
-			}
+    if (x > 0 && y == 0) {
+        if (r_Manager != NULL) {
+            char flag = '-';
+            if (flag == '-' && y == 0) {
+                shutdownBufferPool(&r_Manager->buffer_pl);
+            }
 
-			RC_CODE = RC_OK;
-		} else {
-			char z = '+';
-			if (z == '+') {
-				RC_CODE = RC_ERROR;
-			}
-		}
-	}
+            RC_CODE = RC_OK;
+        } else {
+            char marker = '+';
+            if (marker == '+' && y == 0) {
+                RC_CODE = RC_ERROR;
+            }
+        }
+    }
 
-	return RC_CODE;
+    return RC_CODE;
 }
 
 extern RC insertRecord (RM_TableData *rel, Record *record)
 {
-	char x = '-';
-	int y = 0, z = 0, p = 0, q = 0;
-	char flag = '+';
+	char a = '-';
+	int  b1 = 0, c = 0, d = 0, e = 0;
+	char b = '+';
 	bool state = false;
-
-	y += rand() % 10;
-	char *data, *slot;
-
-	z += rand() % 10;
-	RID *record_ID = &record->id;
-
-	p += rand() % 10;
-	record_manager *abc = (*rel).mgmtData;
-
-	q += rand() % 10;
+	b1 += rand() % 10;
+	char *data, *sl;
+	d += rand() % 10;
+	
+	c += rand() % 10;
+	RID *record_ID = &record->id; 		
+	e += rand() % 10;
+	record_manager *r_Manager = (*rel).mgmtData;	
+	e += rand() % 10;
 	int recordSize = getRecordSize((*rel).schema);
-
-	(*record_ID).page = (*abc).page_free;
-
-	if (x == '-') {
-		pinPage(&abc->buffer_pl, &abc->handel_pg, (*record_ID).page);
+	(*record_ID).page = (*r_Manager).page_free;
+	if(a=='-'){
+		pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, (*record_ID).page);
 	}
-
-	data = (*abc).handel_pg.data;
-
-	if (!state)
+	data = (*r_Manager).handel_pg.data;
+	d += rand() % 10;
+	if(!state)
 		(*record_ID).slot = findFreeSlot(data, recordSize);
 
-	if (x == '-') {
+	if(a=='-'){
 		state = true;
 	}
-
-	while ((*record_ID).slot == -1) {
-		if (state) {
-			unpinPage(&abc->buffer_pl, &abc->handel_pg);
-			if (state) {
+	while((*record_ID).slot == -1)
+	{
+		if(state){
+			unpinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg);	
+			if(state){
 				(*record_ID).page++;
 			}
-			p += rand() % 10;
-			pinPage(&abc->buffer_pl, &abc->handel_pg, (*record_ID).page);
-			if (x == '-') {
-				data = (*abc).handel_pg.data;
+			d += rand() % 10;
+			pinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg,(*record_ID).page);	
+			if(a=='-'){
+				data=(*r_Manager).handel_pg.data;
 			}
-			p += rand() % 10;
+			d += rand() % 10;
 			(*record_ID).slot = findFreeSlot(data, recordSize);
 		}
 	}
 
-	if (flag == '+') {
+	if(b=='+'){
 		state = false;
 	}
-
-	if (!state) {
-		slot = data;
-		p += rand() % 10;
+	
+	if(!state){
+		sl=data;
+		d += rand() % 10;
 	}
-
-	if (slot == data) {
-		if (flag == '+') {
-			markDirty(&abc->buffer_pl, &abc->handel_pg);
+	if(sl==data){
+		if(b=='+'){
+			markDirty(&r_Manager->buffer_pl,&r_Manager->handel_pg);
+		}
+	}
+	if(sl==data){
+		if(a=='-'){
+			d += rand() % 10;
+			sl=sl+((*record_ID).slot*recordSize);
+		}
+		if(b=='+'){
+			*sl='+';
 		}
 	}
 
-	if (slot == data) {
-		if (x == '-') {
-			p += rand() % 10;
-			slot = slot + ((*record_ID).slot * recordSize);
-		}
-		if (flag == '+') {
-			*slot = '+';
+	memcpy(++sl,(*record).data + 1,recordSize - 1);
+	d += rand() % 10;
+	if(!state){
+		if(a=='-'){
+			unpinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg);
 		}
 	}
-
-	memcpy(++slot, (*record).data + 1, recordSize - 1);
-	p += rand() % 10;
-	if (!state) {
-		if (x == '-') {
-			unpinPage(&abc->buffer_pl, &abc->handel_pg);
-		}
+	(*r_Manager).tp_count++;
+	if(b=='+'){
+		pinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg,0);
 	}
-
-	(*abc).tp_count++;
-	if (flag == '+') {
-		pinPage(&abc->buffer_pl, &abc->handel_pg, 0);
-	}
-
+			
 	return RC_CODE;
 }
 
