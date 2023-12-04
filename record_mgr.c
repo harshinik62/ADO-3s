@@ -756,52 +756,44 @@ extern RC deleteRecord (RM_TableData *rel, RID id)
 
 extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 {
-	char b = '+';
-	RC_CODE = RC_OK;
-	char a = '-';
-	bool state = false;
-	record_manager *r_Manager = (*rel).mgmtData;
-	if(a=='-'){
-		state = true;
-	}
-	pinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg, id.page);
-	if(state){
-		a = '-';
-	}
-	int recordSize = getRecordSize((*rel).schema);
-	if(a=='+'){
-		(*record).data = (char*) malloc(recordSize);
-	}
-	char *dataPointer = (*r_Manager).handel_pg.data;
-	if(b=='-'){
-		dataPointer = dataPointer + (id.slot * recordSize);
-	}
-	dataPointer = dataPointer + (id.slot * recordSize);
-	if(recordSize !=0 ){
-		if(*dataPointer == '+')
-		{
-			(*record).id = id;
-			if(a=='+'){
-				(*record).data = (char*) malloc(recordSize);
-			}
-			char *data = (*record).data;
-			if(b=='-'){
-				*data = '-';
-			}
-			memcpy(++data, dataPointer + 1, recordSize - 1);
-			if(!state){
-				unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-			}
-		}
-		else
-		{
-			return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
-		}			
-	}
-	unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-	if(!state)	
-		(*record).id = id;
-	return RC_CODE;
+	int temp =0;
+    while (TRUE){
+        record_manager *r_Manager = rel->mgmtData;
+        temp = temp++;
+        break;
+    }
+    
+    if(temp ==1){
+        pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, id.page);
+        int j=6;
+        temp =temp*j;
+    }
+        
+    int recordSize = getRecordSize(rel->schema);
+    if(recordSize  == 0){
+        return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
+    }
+    else{
+        char a = 'b';
+        do{
+            char *dataPointer = r_Manager->handel_pg.data + (id.slot * recordSize);
+
+            if (*dataPointer != '+') {
+                unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+            }
+        }while(FALSE);
+    }
+    record->id = id;
+    record->data = (char*) malloc(recordSize);
+    if (record->data == NULL) {
+        unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+        return RC_RM_MEMORY_ERROR;
+    }
+
+    memcpy(record->data, dataPointer, recordSize);
+
+    unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+    return RC_OK;
 }
 
 extern RC createRecord (Record **record, Schema *schema)

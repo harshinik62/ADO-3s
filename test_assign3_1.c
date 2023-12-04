@@ -384,16 +384,16 @@ testInsertManyRecords(void)
 			{9, "iiii", 2},
 			{10, "jjjj", 5},
 	};
-	TestRecord realInserts[100];
+	TestRecord realInserts[10000];
 	TestRecord updates[] = {
 			{3333, "iiii", 6}
 	};
-	int numInserts = 100, i;
+	int numInserts = 10000, i;
 	int randomRec = 3333;
 	Record *r;
 	RID *rids;
 	Schema *schema;
-	testName = "test creating a new table and inserting 100 records then updating record from rids[3333]";
+	testName = "test creating a new table and inserting 10000 records then updating record from rids[3333]";
 	schema = testSchema();
 	rids = (RID *) malloc(sizeof(RID) * numInserts);
 
