@@ -453,7 +453,7 @@ extern RC openTable (RM_TableData *rel, char *name)
 			goto loop1;
 		}
 
-		if (a1 == '-' || b1 == '+' && flag2 == 1) {
+		if (a1 == '-' || (b1 == '+' && flag2 == 1)) {
 			(*rel).schema = sch;
 		}
 
