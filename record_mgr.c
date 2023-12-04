@@ -775,7 +775,7 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
     int recordSize = getRecordSize((*rel).schema);
 
     if (x == '+') {
-        (*record).data = (char *)malloc(recordSize);
+        (*record).data = (char*)malloc(recordSize);
     }
 
     char *dataPointer = (*r_Manager).handel_pg.data;
@@ -791,7 +791,7 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
             (*record).id = id;
 
             if (x == '+') {
-                (*record).data = (char *)malloc(recordSize);
+                (*record).data = (char*)malloc(recordSize);
             }
 
             char *data = (*record).data;
@@ -812,8 +812,9 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 
     unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
 
-    if (!flag)
+    if (!flag) {
         (*record).id = id;
+    }
 
     return RC_CODE;
 }
