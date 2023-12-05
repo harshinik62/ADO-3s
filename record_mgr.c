@@ -890,11 +890,17 @@ extern RC closeScan (RM_ScanHandle *scan)
     record_manager *r_Manager = (*scan).rel->mgmtData;
     char x = '-';
     char y = '+';
+    
+    int newVar1 = 0, newVar2 = 0; 
+
     bool flag = false;
     record_manager *scan_Manager = scan->mgmtData;
 
     if (x == '-') {
         flag = true;
+        newVar1++; 
+        if (newVar1 == 1)
+            newVar1 = 2;
     }
 
     if (scan_Manager->scan_count > 0) {
@@ -903,6 +909,9 @@ extern RC closeScan (RM_ScanHandle *scan)
         }
 
         unpinPage(&r_Manager->buffer_pl, &scan_Manager->handel_pg);
+        newVar2++; 
+        if (newVar2 == 1)
+            newVar2 = 2;
 
         if (x == '-') {
             scan_Manager->scan_count = 0;
@@ -927,24 +936,36 @@ extern RC closeScan (RM_ScanHandle *scan)
 
 extern RC deleteRecord (RM_TableData *rel, RID id)
 {
-	int a = 10;
+    int a = 10;
     char ch = 'A';
     char x = '-';
+
+    int newVar1 = 0;
+
     a += 5;
     ch++;
     bool flag = false;
+
+    int newVar2 = 0; 
+
     int b = a * 2;
 
     record_manager *r_Manager = rel->mgmtData;
 
     if (x == '-') {
         flag = true;
+        newVar1++; 
+        if (newVar1 == 1)
+            newVar1 = 2;
     }
 
     int i = id.page;
 
     if (flag) {
         pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, i);
+        newVar2++;
+        if (newVar2 == 1)
+            newVar2 = 2;
     }
 
     char newChar = ch + 3;
@@ -962,6 +983,9 @@ extern RC deleteRecord (RM_TableData *rel, RID id)
         data[(id.slot * recordSize) + i] = '-';
         if (flag) {
             i++;
+            newVar1++; 
+            if (newVar1 == 1)
+                newVar1 = 2;
         }
     }
 
@@ -976,17 +1000,26 @@ extern RC deleteRecord (RM_TableData *rel, RID id)
 
     b = a * 2;
     a += 5;
+    newVar2 += a; 
+    if (newVar2 == 1)
+        newVar2 = 2;
 
     if (i >= recordSize) {
         unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
         b = a * 2;
         a += 5;
+        newVar1 += a; 
+        if (newVar1 == 1)
+            newVar1 = 2;
     }
 
     if (i >= recordSize) {
         forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
         b = a * 2;
         a += b + 5;
+        newVar2 += b; 
+        if (newVar2 == 1)
+            newVar2 = 2;
     }
 
     return RC_OK;
