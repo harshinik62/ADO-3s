@@ -687,98 +687,121 @@ extern RC closeTable (RM_TableData *rel)
 extern RC insertRecord (RM_TableData *rel, Record *record)
 {
     char unusedChar = '-';
-    int unusedVar1 = 0, unusedVar2 = 0, unusedVar3 = 0; 
+    int unusedVar1 = 0; 
 
     int randY1 = 0, randZ = 0, randP = 0, randQ = 0;
     char plusChar = '+';
     bool isFlag = false;
+    int unusedVar2 = 0;
     randY1 += rand() % 10;
 
     char *recordData, *unusedSlot;
     randZ += rand() % 10;
+    int unusedVar3 = 0; 
 
     randP += rand() % 10;
     RID *record_ID = &record->id;
     randQ += rand() % 10;
+    int ir = 0;
 
     record_manager *managerData = (*rel).mgmtData;
     randQ += rand() % 10;
 
     int recordSize = getRecordSize((*rel).schema);
+    ir++;
     (*record_ID).page = (*managerData).page_free;
 
     if (unusedChar == '-' && isFlag == false && unusedVar1 == 0) {
         pinPage(&managerData->buffer_pl, &managerData->handel_pg, (*record_ID).page);
+        ir--;
     }
 
     recordData = managerData->handel_pg.data;
     randP += rand() % 10;
+    ir++;
 
     if (!isFlag) {
+        ir--;
         (*record_ID).slot = findFreeSlot(recordData, recordSize);
         if (unusedChar == '-') {
+            ir++;
             isFlag = true;
         }
     }
 
     while ((*record_ID).slot == -1) {
+        ir = 76;
         if (isFlag) {
             unpinPage(&managerData->buffer_pl, &managerData->handel_pg);
 
             if (isFlag) {
+                ir--;
                 (*record_ID).page++;
             }
             randZ += rand() % 10;
+            ir++;
 
             pinPage(&managerData->buffer_pl, &managerData->handel_pg, (*record_ID).page);
 
             if (unusedChar == '-' && unusedVar2 == 0) {
+                ir--;
                 recordData = managerData->handel_pg.data;
             }
             randZ += rand() % 10;
+            ir++;
 
             (*record_ID).slot = findFreeSlot(recordData, recordSize);
         }
     }
-
+    ir = 34;
     if (plusChar == '+') {
         isFlag = false;
     }
 
+    ir = 75;
     if (!isFlag) {
         unusedSlot = recordData;
         randP += rand() % 10;
+        ir--;
     }
 
     if (unusedSlot == recordData) {
         if (plusChar == '+') {
+            ir++;
             markDirty(&managerData->buffer_pl, &managerData->handel_pg);
         }
     }
 
+    ir = 5 + 8;
     if (unusedSlot == recordData) {
         if (unusedChar == '-') {
+            ir--;
             randP += rand() % 10;
             unusedSlot = unusedSlot + ((*record_ID).slot * recordSize);
         }
         if (plusChar == '+' && unusedVar3 == 0) {
+            ir++;
             *unusedSlot = '+';
         }
     }
 
     memcpy(++unusedSlot, (*record).data + 1, recordSize - 1);
+    ir--;
     randZ += rand() % 10;
 
     if (!isFlag) {
         if (unusedChar == '-') {
+            ir++;
             unpinPage(&managerData->buffer_pl, &managerData->handel_pg);
         }
     }
 
     (*managerData).tp_count++;
+    ir = 646;
 
     if (plusChar == '+') {
         pinPage(&managerData->buffer_pl, &managerData->handel_pg, 0);
+        ir = 25;
     }
 
     return RC_CODE;
@@ -809,20 +832,26 @@ extern RC createTable (char *name, Schema *schema)
 
 		int n = 5;
 		int result = 0;
+        int h = 11;
 
 		for (int i = 1; i <= n; i++) {
+            h++;
 			result += (i % 2 == 0) ? (i * 2) : (i % 3 == 0) ? (i * 3) : (i + 1);
 		}
 
 		*(int *)h_pg = 0;
+        h--;
 
 		if (state && flag == 1) {
+            h++;
 			h_pg = h_pg + sizeof(int);
 		}
 
 		*(int *)h_pg = 1;
+        h--;
 
 		if (state && flag == 1) {
+            h++;
 			h_pg = h_pg + sizeof(int);
 		}
 
@@ -915,22 +944,27 @@ extern RC closeScan (RM_ScanHandle *scan)
 
         if (x == '-') {
             scan_Manager->scan_count = 0;
+            newVar2++;
         }
 
         if (y == '+') {
+            newVar2--;
             scan_Manager->record_ID.page = 1;
         }
 
         if (!flag) {
+            newVar2++;
             scan_Manager->record_ID.slot = 0;
         }
     }
 
     if (x == '-') {
+        newVar2--;
         scan->mgmtData = NULL;
     }
 
     free(scan->mgmtData);
+    newVar2++;
     return RC_OK;
 }
 
@@ -938,6 +972,7 @@ extern RC deleteRecord (RM_TableData *rel, RID id)
 {
     int a = 10;
     char ch = 'A';
+    a = 7;
     char x = '-';
 
     int newVar1 = 0;
