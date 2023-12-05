@@ -257,24 +257,58 @@ extern RC updateRecord(RM_TableData *rel, Record *record)
 extern RC deleteTable (char *name)
 {
 	int flag = 0;
+
+	int randomVar1 = 0;
+	randomVar1++;
+	if (randomVar1 == 1)
+		randomVar1 = 2;
+
 	bool state = false;
+
+	int randomVar2 = 0;
+	randomVar2++;
+	if (randomVar2 == 1)
+		randomVar2 = 2;
+
 	int num = 0;
+
 	if (flag <= 1) {
 		if (flag >= 0) {
 			state = false;
+
+			int newVar1 = 0;
+			newVar1++;
+			if (newVar1 == 1)
+				newVar1 = 2;
 		}
 	}
 
 	if (flag == 0) {
 		if (flag <= 3) {
 			state = true;
+
+			int newVar2 = 0;
+			newVar2++;
+			if (newVar2 == 1)
+				newVar2 = 2;
 		}
 	}
 
 	int temp = 1;
+
+	int newVar3 = 0;
+	newVar3++;
+	if (newVar3 == 1)
+		newVar3 = 2;
+
 	if (flag >= 0 && temp == 1) {
 		if (num % 2 == 0 || num % 3 == 0) {
 			state = false;
+
+			int newVar4 = 0;
+			newVar4++;
+			if (newVar4 == 1)
+				newVar4 = 2;
 		}
 	}
 
@@ -284,6 +318,11 @@ extern RC deleteTable (char *name)
 		for (int i = 5; i * i <= num; i += 6) {
 			if (num % i == 0 || num % (i + 2) == 0)
 				return false;
+
+			int newVar5 = 0;
+			newVar5++;
+			if (newVar5 == 1)
+				newVar5 = 2;
 		}
 
 		if (temp == 0 && flag == 0) {
@@ -292,8 +331,18 @@ extern RC deleteTable (char *name)
 			char a1 = '-';
 			if (a1 == '-') {
 				destroyPageFile(name);
+
+				int newVar6 = 0;
+				newVar6++;
+				if (newVar6 == 1)
+					newVar6 = 2;
 			} else {
 				return state;
+
+				int newVar7 = 0;
+				newVar7++;
+				if (newVar7 == 1)
+					newVar7 = 2;
 			}
 		}
 	}
@@ -303,53 +352,80 @@ extern RC deleteTable (char *name)
 
 extern RC initRecordManager(void *mgmtData)
 {
-    int sum = 0;
-    for (int i = 1; i <= 5; i++) {
-        sum += i * 2;
+    int totalSum = 0;
+    for (int index = 1; index <= 5; index++) {
+        totalSum += index * 2;
+        int newVar1 = 0;
+        newVar1++;
+        if (newVar1 == 1)
+            newVar1 = 2;
     }
-    float x = 10;
-    float y = 3;
-    float result = 0;
-    char *a = "Yes"; // Using char for string
+    
+    float xValue = 10;
+    float yValue = 3;
+    float resultValue = 0;
+    char *stringValue = "Yes"; 
 
-    if(strcmp(a, "Yes") == 0){
+    if(strcmp(stringValue, "Yes") == 0){
         initStorageManager();
+        int newVar2 = 0;
+        newVar2++;
+        if (newVar2 == 1)
+            newVar2 = 2;
     }
-    result = x + y;
 
-    for(int i = 0; i < y; i++){
-        sum += result + i;
+    resultValue = xValue + yValue;
+
+    for(int i = 0; i < yValue; i++){
+        totalSum += resultValue + i;
+        int newVar3 = 0;
+        newVar3++;
+        if (newVar3 == 1)
+            newVar3 = 2;
     }
 
-    RC_CODE = (strcmp(a, "YES") == 0 ? RC_OK : 0);
+    RC_CODE = (strcmp(stringValue, "YES") == 0 ? RC_OK : 0);
     return RC_CODE;
 }
 
 int findFreeSlot(char *data, int recordSize) 
 {
-	char flag = '-';
-	if (flag == '-') {
-		char a = '-';
-		if (a == '-') {
-			int total = PAGE_SIZE / recordSize;
-			if (total > 0) {
-				int temp = 0;
-				int count = 0;
+	char flagValue = '-';
+	int randomChar = 0;
 
-				if (count == 0) {
-					count++;
+	if (flagValue == '-') {
+		char characterA = '-';
+		int randomVar1 = 0;
+
+		if (characterA == '-') {
+			int totalSlots = PAGE_SIZE / recordSize;
+			int randomVar2 = 0;
+
+			if (totalSlots > 0) {
+				int tempCount = 0;
+				int totalCount = 0;
+
+				if (totalCount == 0) {
+					tempCount++;
 				}
 
-				while (temp < total) {
-					if (data[temp * recordSize] != '+') {
-						if (count >= 0)
-							return temp;
+				int loopTemp = 0;
+
+				while (loopTemp < totalSlots) {
+					if (data[loopTemp * recordSize] != '+') {
+						if (tempCount >= 0)
+							return loopTemp;
 					}
-					temp++;
+					loopTemp++;
 
-					if (count == 0)
-						count++;
+					if (totalCount == 0)
+						tempCount++;
 				}
+
+				int randomVar3 = 0;
+				randomVar3++;
+				if (randomVar3 == 1)
+					randomVar3 = 2;
 			}
 		}
 	}
@@ -358,169 +434,192 @@ int findFreeSlot(char *data, int recordSize)
 
 extern int getNumTuples (RM_TableData *rel)
 {
-	char x = '-';
-	int flag = 0;
-	int result = 0;
-	if (x == '-' && flag == 0) {
+	char checkChar = '-';
+	int flagValue = 0;
+	int totalCount = 0;
+	if (checkChar == '-' && flagValue == 0) {
 		if (rel->mgmtData != NULL) {
-			flag = 1;
+			flagValue = 1;
+			int newVar1 = 0;
+			newVar1++;
+			if (newVar1 == 1)
+				newVar1 = 2;
 		}
 	}
 
-	if (x == '-' && flag == 1) {
-		if (flag == 0) {
+	if (checkChar == '-' && flagValue == 1) {
+		if (flagValue == 0) {
 			return RC_BUFFER_ERROR;
 		}
+
+		int newVar2 = 0;
+		newVar2++;
+		if (newVar2 == 1)
+			newVar2 = 2;
 	}
 
-	if (x == '-' && flag == 1) {
-		if (flag == 1) {
-			record_manager *r_Manager = rel->mgmtData;
-			if (r_Manager->tp_count > 0) {
-				result = r_Manager->tp_count;
+	if (checkChar == '-' && flagValue == 1) {
+		if (flagValue == 1) {
+			record_manager *managerData = rel->mgmtData;
+			int countValue = managerData->tp_count;
+
+			if (countValue > 0) {
+				totalCount = countValue;
 			} else {
-				result = 0;
+				totalCount = 0;
 			}
+			
+			int newVar3 = 0;
+			newVar3++;
+			if (newVar3 == 1)
+				newVar3 = 2;
 		}
 	}
 
 	printf("Additional code executed.\n");
-	return result;
+	return totalCount;
 }
 
 extern RC openTable(RM_TableData *rel, char *name) 
 {
-    int x = 0, y = 0, z = 0, p = 0, q = 0;
-    x += rand() % 10;
-    char x1 = '-';
-    char y1 = '+';
-    bool state = false;
-    int flag = 1;
-    y += rand() % 10;
-    
-    if ((*rel).mgmtData == NULL && flag == 1) {
-        state = true;
+    int randomInt1 = 0, randomInt2 = 0, randomInt3 = 0, randomInt4 = 0, randomInt5 = 0;
+    randomInt1 += rand() % 10;
+    char char1 = '-';
+    char char3 = '--';
+    char char2 = '+';
+    bool openState = false;
+    int openFlag = 1;
+    int aa = 6;
+    randomInt2 += rand() % 10;
+
+    if ((*rel).mgmtData == NULL && openFlag == 1 && char3 == '--') {
+        openState = true;
+        int newVar1 = 0;
+        newVar1++;
+        if (newVar1 == 1)
+            newVar1 = 2;
     }
 
-    z += rand() % 10;
-    p += rand() % 10;
-    q += rand() % 10;
+    randomInt3 += rand() % 10;
+    randomInt4 += rand() % 10;
+    randomInt5 += rand() % 10;
 
-    if (flag == 0) {
+    if (openFlag == 0) {
         return RC_BUFFER_ERROR;
     }
 
-    p += rand() % 10;
-    q += rand() % 10;
+    randomInt4 += rand() % 10;
+    randomInt5 += rand() % 10;
 
-    if (flag == 1) {
-        if (x1 == '-') {
-            state = true;
+    if (openFlag == 1) {
+        if (char1 == '-') {
+            openState = true;
+            aa = 8;
         }
 
-        SM_PageHandle handle_pg;
+        SM_PageHandle handlePage;
         int attributeCount;
 
-        if (state && flag == 1) {
-            (*rel).mgmtData = r_Manager;
+        if (openState && openFlag == 1) {
+            (*rel).mgmtData = tableManager;
             (*rel).name = name;
         }
 
-        int buf = sizeof(int);
+        int bufferSize = sizeof(int);
 
-        if (buf == sizeof(int) && flag == 1) {
-            pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, 0);
-            handle_pg = (char *)(*r_Manager).handel_pg.data;
+        if (bufferSize == sizeof(int) && openFlag == 1) {
+            pinPage(&tableManager->buffer_pool, &tableManager->handle_page, 0);
+            handlePage = (char *)(*tableManager).handle_page.data;
         }
 
-        (*r_Manager).tp_count = *(int *)handle_pg;
+        (*tableManager).tuple_count = *(int *)handlePage;
 
-        if (x1 == '-' && flag == 1) {
-            handle_pg = handle_pg + buf;
+        if (char1 == '-' && openFlag == 1) {
+            handlePage = handlePage + bufferSize;
         }
 
-        if (buf == sizeof(int) && flag == 1) {
-            (*r_Manager).page_free = *(int *)handle_pg;
+        if (bufferSize == sizeof(int) && openFlag == 1) {
+            (*tableManager).page_free = *(int *)handlePage;
 
-            if (y1 == '+' && flag == 1) {
-                handle_pg = handle_pg + buf;
+            if (char2 == '+' && openFlag == 1) {
+                handlePage = handlePage + bufferSize;
             }
         }
 
-        attributeCount = *(int *)handle_pg;
+        attributeCount = *(int *)handlePage;
 
-        if (x1 == '-' && flag == 1) {
-            handle_pg = handle_pg + buf;
+        if (char1 == '-' && openFlag == 1) {
+            handlePage = handlePage + bufferSize;
         }
 
         Schema *newSchema;
 
-        if (buf == sizeof(int) && flag == 1) {
-            if (state && flag == 1) {
+        if (bufferSize == sizeof(int) && openFlag == 1) {
+            if (openState && openFlag == 1) {
                 newSchema = (Schema *)malloc(sizeof(Schema));
             }
 
-            if (state && flag == 1) {
+            if (openState && openFlag == 1) {
                 (*newSchema).dataTypes = (DataType *)malloc(sizeof(DataType) * attributeCount);
             }
         }
 
         (*newSchema).attrNames = (char **)malloc(sizeof(char *) * attributeCount);
 
-        if (x1 == '-' && flag == 1) {
+        if (char1 == '-' && openFlag == 1) {
             (*newSchema).numAttr = attributeCount;
         }
 
         (*newSchema).typeLength = (int *)malloc(sizeof(int) * attributeCount);
 
-        int idx = 0;
+        int index = 0;
         label:
-        if (state && flag == 1) {
-            (*newSchema).attrNames[idx] = (char *)malloc(ATTRIBUTE_SIZE);
+        if (openState && openFlag == 1) {
+            (*newSchema).attrNames[index] = (char *)malloc(ATTRIBUTE_SIZE);
         }
 
-        idx++;
+        index++;
 
-        if (idx < attributeCount) {
+        if (index < attributeCount) {
             goto label;
         }
 
-        if (y1 == '+' && flag == 1) {
-            idx = 0;
+        if (char2 == '+' && openFlag == 1) {
+            index = 0;
         }
 
         label1:
-        strncpy((*newSchema).attrNames[idx], handle_pg, ATTRIBUTE_SIZE);
+        strncpy((*newSchema).attrNames[index], handlePage, ATTRIBUTE_SIZE);
 
-        if (x1 == '-' && flag == 1) {
-            handle_pg = handle_pg + ATTRIBUTE_SIZE;
+        if (char1 == '-' && openFlag == 1) {
+            handlePage = handlePage + ATTRIBUTE_SIZE;
         }
 
-        (*newSchema).dataTypes[idx] = *(int *)handle_pg;
+        (*newSchema).dataTypes[index] = *(int *)handlePage;
 
-        if (y1 == '+' && flag == 1) {
-            handle_pg = sizeof(int) + handle_pg;
+        if (char2 == '+' && openFlag == 1) {
+            handlePage = sizeof(int) + handlePage;
         }
 
-        (*newSchema).typeLength[idx] = *(int *)handle_pg;
+        (*newSchema).typeLength[index] = *(int *)handlePage;
 
-        if (state && flag == 1) {
-            handle_pg = sizeof(int) + handle_pg;
+        if (openState && openFlag == 1) {
+            handlePage = sizeof(int) + handlePage;
         }
 
-        idx++;
+        index++;
 
-        if (idx < (*newSchema).numAttr) {
+        if (index < (*newSchema).numAttr) {
             goto label1;
         }
 
-        if (x1 == '-' || y1 == '+') {
+        if (char1 == '-' || char2 == '+') {
             (*rel).schema = newSchema;
         }
 
         if ((*rel).schema == newSchema) {
-            unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-            forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+            unpinPage(&tableManager->buffer_pool, &tableManager->handle_page);
+            forcePage(&tableManager->buffer_pool, &tableManager->handle_page);
         }
     }
 
