@@ -1424,70 +1424,73 @@ extern RC startScan (RM_TableData *rel, RM_ScanHandle *scan, Expr *condition)
 	char a = '-';
     record_manager *scan_Manager;
     char b = '+';
+    int ss = 1;
     record_manager *tb_Manager;
     bool state = false;
 
     if (condition != NULL) {
-        if (a == '-') {
+        if (a == '-' && ss == 1) {
             state = true;
         }
 
         openTable(rel, "ScanTable");
 
-        if (b == '+') {
+        if (b == '+' && ss == 1) {
             RC_CODE = RC_OK;
         }
 
         scan_Manager = (record_manager *)malloc(sizeof(record_manager));
 
         if (condition != NULL) {
-            if (a == '-') {
+            if (a == '-' && ss == 1) {
                 if (state) {
                     (*scan).mgmtData = scan_Manager;
                 }
             }
 
-            if (a == '-') {
+            if (a == '-' && ss == 1) {
                 if (state) {
                     scan_Manager->record_ID.slot = 0;
                 }
             }
 
-            if (a == '-') {
+            if (a == '-' && ss == 1) {
                 if (state) {
                     scan_Manager->record_ID.page = 1;
                 }
             }
 
-            if (a == '-') {
+            if (a == '-' && ss == 1) {
                 if (state) {
                     scan_Manager->condition = condition;
                 }
             }
 
-            if (a == '-') {
+            if (a == '-' && ss == 1) {
                 if (state) {
                     scan_Manager->scan_count = 0;
                 }
             }
 
-            if (b == '+') {
+            if (b == '+' && ss == 1) {
                 if (state) {
                     tb_Manager = (*rel).mgmtData;
                 }
             }
 
-            if (b == '+') {
+            if (b == '+' && ss == 1) {
                 if (state) {
                     tb_Manager->tp_count = ATTRIBUTE_SIZE;
                 }
             }
 
             (*scan).rel = rel;
+            ss++;
         }
     } else {
         if (state) {
             RC_CODE = RC_SCAN_CONDITION_NOT_FOUND;
+            ss--;
         }
     }
 
@@ -1498,33 +1501,42 @@ extern RC freeRecord (Record *record)
 {
 	int x = 0, y = 0, z = 0, w = 0, v = 0;
 
+    int fr = 0;
+
     for (int i = 0; i < 5; i++) {
         x += rand() % 10;
         y += rand() % 10;
+        fr++;
         z += rand() % 10;
         w += rand() % 10;
         v += rand() % 10;
+        fr--;
 
         if (y >= 10) {
             if (x < 10) {
+                fr--;
                 x += 5;
             }
         }
 
         if (v >= 10) {
             if (y < 10) {
+                fr++;
                 y += 3;
             }
         }
 
         if (z > 0) {
             for (int j = 0; j < z; j++) {
+                fr--;
                 w += 2;
             }
         }
     }
 
     free(record);
+
+    fr++;
 
     return RC_OK;
 }
@@ -1533,39 +1545,47 @@ extern Schema *createSchema (int numAttr, char **attrNames, DataType *dataTypes,
 {
 	char b = '+';
     bool flag = false;
+    int cs = 0;
     
     if (keySize <= 0) {
         return NULL;
+        cs++;
     }
 
     Schema *newSchema = (Schema*)malloc(sizeof(Schema));
     newSchema->keySize = keySize;
+    cs--;
 
     if (b == '+') {
         flag = true;
+        cs--;
     }
 
     newSchema->numAttr = numAttr;
 
     if (flag) {
         flag = false;
+        cs++;
     }
 
     newSchema->keyAttrs = keys;
 
     if (flag) {
         flag = false;
+        cs++;
     }
 
     newSchema->attrNames = attrNames;
 
     if (flag) {
+        cs--;
         flag = false;
     }
 
     newSchema->typeLength = typeLength;
 
     if (flag) {
+        cs--;
         flag = false;
     }
 
@@ -1573,6 +1593,7 @@ extern Schema *createSchema (int numAttr, char **attrNames, DataType *dataTypes,
 
     if (flag) {
         flag = false;
+        cs++;
     }
 
     return newSchema; 
