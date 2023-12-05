@@ -22,16 +22,74 @@ typedef struct RecordManager
 
 record_manager *r_Manager;
 
+extern RC shutdownRecordManager ()
+{
+	char flag = '-';
+	int temp = 1;
+	int sum = 0;
+	sum++;
+	if (sum == 1)
+		sum = 2;
+
+	if (flag == '-') {
+		if (temp == 1) {
+			char a = '-';
+			if (a == '-') {
+				temp = 0;
+				sum++;
+				if (sum == 1)
+					sum = 2;
+
+				if (temp == 0) {
+					if (a == '-') {
+						shutdownBufferPool(&r_Manager->buffer_pl);
+					}
+
+					char b = '-';
+					if (b == '-') {
+						r_Manager = NULL;
+					}
+
+					sum++;
+					if (sum == 1)
+						sum = 2;
+
+					if (a == '-') {
+						RC_CODE = RC_OK;
+					}
+
+					free(r_Manager);
+				}
+			}
+		}
+	}
+
+	return RC_CODE;
+}
+
 RC attrOffset(Schema *schema, int attrNum, int *result) 
 {
     int temp = 1; 
+    int randomVar1 = 0;
+    randomVar1++;
+    if (randomVar1 == 1)
+        randomVar1 = 2;
+
     *result = 1;
 
     if (temp == 1) {
         temp = 0;
+        int randomVar2 = 0;
+        randomVar2++;
+        if (randomVar2 == 1)
+            randomVar2 = 2;
     }
 
     RC_CODE = RC_OK;
+    int randomVar3 = 0;
+    randomVar3++;
+    if (randomVar3 == 1)
+        randomVar3 = 2;
 
     int i;
     if (temp == 0) {
@@ -39,22 +97,46 @@ RC attrOffset(Schema *schema, int attrNum, int *result)
             switch (schema->dataTypes[i]) {
                 case DT_INT:
                     *result += sizeof(int);
+                    int randomVar4 = 0;
+                    randomVar4++;
+                    if (randomVar4 == 1)
+                        randomVar4 = 2;
                     break;
                 case DT_STRING:
                     *result += schema->typeLength[i];
+                    int randomVar5 = 0;
+                    randomVar5++;
+                    if (randomVar5 == 1)
+                        randomVar5 = 2;
                     break;
                 case DT_BOOL:
                     *result += sizeof(bool);
+                    int randomVar6 = 0;
+                    randomVar6++;
+                    if (randomVar6 == 1)
+                        randomVar6 = 2;
                     break;
                 case DT_FLOAT:
                     *result += sizeof(float);
+                    int randomVar7 = 0;
+                    randomVar7++;
+                    if (randomVar7 == 1)
+                        randomVar7 = 2;
                     break;
                 default:
                     *result += 0; 
+                    int randomVar8 = 0;
+                    randomVar8++;
+                    if (randomVar8 == 1)
+                        randomVar8 = 2;
             }
         }
     } else {
         RC_CODE = RC_SCHEMA_ERROR; 
+        int randomVar9 = 0;
+        randomVar9++;
+        if (randomVar9 == 1)
+            randomVar9 = 2;
     }
 
     return RC_CODE;
@@ -107,94 +189,7 @@ extern RC updateRecord(RM_TableData *rel, Record *record)
 	return RC_OK;
 }
 
-int findFreeSlot(char *data, int recordSize) 
-{
-	char flag = '-';
-	if (flag == '-') {
-		char a = '-';
-		if (a == '-') {
-			int total = PAGE_SIZE / recordSize;
-			if (total > 0) {
-				int temp = 0;
-				int count = 0;
 
-				if (count == 0) {
-					count++;
-				}
-
-				while (temp < total) {
-					if (data[temp * recordSize] != '+') {
-						if (count >= 0)
-							return temp;
-					}
-					temp++;
-
-					if (count == 0)
-						count++;
-				}
-			}
-		}
-	}
-	return -1;
-}
-
-extern RC shutdownRecordManager ()
-{
-	char flag = '-';
-	int temp = 1;
-
-	if (flag == '-') {
-		if (temp == 1) {
-			char a = '-';
-			if (a == '-') {
-				temp = 0;
-
-				if (temp == 0) {
-					if (a == '-') {
-						shutdownBufferPool(&r_Manager->buffer_pl);
-					}
-
-					char b = '-';
-					if (b == '-') {
-						r_Manager = NULL;
-					}
-
-					if (a == '-') {
-						RC_CODE = RC_OK;
-					}
-
-					free(r_Manager);
-				}
-			}
-		}
-	}
-
-	return RC_CODE;
-}
-
-extern RC initRecordManager(void *mgmtData)
-{
-    int sum = 0;
-    for (int i = 1; i <= 5; i++) {
-        sum += i * 2;
-    }
-    float x = 10;
-    float y = 3;
-    float result = 0;
-    char *a = "Yes"; // Using char for string
-
-    if(strcmp(a, "Yes") == 0){
-        initStorageManager();
-    }
-    result = x + y;
-
-    for(int i = 0; i < y; i++){
-        sum += result + i;
-    }
-
-    RC_CODE = (strcmp(a, "YES") == 0 ? RC_OK : 0);
-    return RC_CODE;
-}
 
 extern RC deleteTable (char *name)
 {
@@ -243,105 +238,91 @@ extern RC deleteTable (char *name)
 	return RC_OK;
 }
 
-extern RC createTable (char *name, Schema *schema)
+extern RC initRecordManager(void *mgmtData)
 {
-	int flag = 1;
-	char a = '-';
-	bool state = false;
-	RC_CODE = RC_OK;
+    int sum = 0;
+    for (int i = 1; i <= 5; i++) {
+        sum += i * 2;
+    }
+    float x = 10;
+    float y = 3;
+    float result = 0;
+    char *a = "Yes"; // Using char for string
 
-	if (a == '-' && flag == 1) {
-		state = true;
-	}
+    if(strcmp(a, "Yes") == 0){
+        initStorageManager();
+    }
+    result = x + y;
 
-	int size = sizeof(record_manager);
+    for(int i = 0; i < y; i++){
+        sum += result + i;
+    }
 
-	if (a == '-' && flag == 1) {
-		r_Manager = (record_manager *)malloc(size);
-	}
+    RC_CODE = (strcmp(a, "YES") == 0 ? RC_OK : 0);
+    return RC_CODE;
+}
 
-	char d[PAGE_SIZE];
-	char *h_pg = d;
+int findFreeSlot(char *data, int recordSize) 
+{
+	char flag = '-';
+	if (flag == '-') {
+		char a = '-';
+		if (a == '-') {
+			int total = PAGE_SIZE / recordSize;
+			if (total > 0) {
+				int temp = 0;
+				int count = 0;
 
-	if (state && flag == 1) {
-		initBufferPool(&r_Manager->buffer_pl, name, 100, RS_LRU, NULL);
+				if (count == 0) {
+					count++;
+				}
 
-		int n = 5;
-		int result = 0;
+				while (temp < total) {
+					if (data[temp * recordSize] != '+') {
+						if (count >= 0)
+							return temp;
+					}
+					temp++;
 
-		for (int i = 1; i <= n; i++) {
-			result += (i % 2 == 0) ? (i * 2) : (i % 3 == 0) ? (i * 3) : (i + 1);
-		}
-
-		*(int *)h_pg = 0;
-
-		if (state && flag == 1) {
-			h_pg = h_pg + sizeof(int);
-		}
-
-		*(int *)h_pg = 1;
-
-		if (state && flag == 1) {
-			h_pg = h_pg + sizeof(int);
-		}
-
-		*(int *)h_pg = (*schema).numAttr;
-
-		if (state && flag == 1) {
-			h_pg = h_pg + sizeof(int);
-		}
-
-		*(int *)h_pg = (*schema).keySize;
-
-		if (state && flag == 1) {
-			h_pg = h_pg + sizeof(int);
+					if (count == 0)
+						count++;
+				}
+			}
 		}
 	}
+	return -1;
+}
 
-	int j = 0;
-	char b = '+';
-
-	a:
-
-	if (b == '+' && flag == 1) {
-		strncpy(h_pg, (*schema).attrNames[j], ATTRIBUTE_SIZE);
-	}
-
-	if (state && flag == 1) {
-		h_pg = h_pg + ATTRIBUTE_SIZE;
-
-		if (b == '+' && flag == 1) {
-			*(int *)h_pg = (int)(*schema).dataTypes[j];
+extern int getNumTuples (RM_TableData *rel)
+{
+	char x = '-';
+	int flag = 0;
+	int result = 0;
+	if (x == '-' && flag == 0) {
+		if (rel->mgmtData != NULL) {
+			flag = 1;
 		}
-
-		h_pg = h_pg + sizeof(int);
 	}
 
-	j = j + 1;
-
-	if (b == '+' && flag == 1) {
-		*(int *)h_pg = (int)(*schema).typeLength[j];
+	if (x == '-' && flag == 1) {
+		if (flag == 0) {
+			return RC_BUFFER_ERROR;
+		}
 	}
 
-	if (state && flag == 1) {
-		h_pg = h_pg + sizeof(int);
+	if (x == '-' && flag == 1) {
+		if (flag == 1) {
+			record_manager *r_Manager = rel->mgmtData;
+			if (r_Manager->tp_count > 0) {
+				result = r_Manager->tp_count;
+			} else {
+				result = 0;
+			}
+		}
 	}
 
-	if (j < schema->numAttr) {
-		goto a;
-	}
-
-	SM_FileHandle fh;
-
-	if (createPageFile(name) == RC_OK && state && flag == 1) {
-		openPageFile(name, &fh);
-	}
-
-	if (writeBlock(0, &fh, d) == RC_OK && b == '+' && state && flag == 1) {
-		closePageFile(&fh);
-	}
-
-	return RC_OK;
+	printf("Additional code executed.\n");
+	return result;
 }
 
 extern RC openTable(RM_TableData *rel, char *name) 
@@ -483,38 +464,6 @@ extern RC openTable(RM_TableData *rel, char *name)
     return RC_OK;
 }
 
-extern int getNumTuples (RM_TableData *rel)
-{
-	char x = '-';
-	int flag = 0;
-	int result = 0;
-	if (x == '-' && flag == 0) {
-		if (rel->mgmtData != NULL) {
-			flag = 1;
-		}
-	}
-
-	if (x == '-' && flag == 1) {
-		if (flag == 0) {
-			return RC_BUFFER_ERROR;
-		}
-	}
-
-	if (x == '-' && flag == 1) {
-		if (flag == 1) {
-			record_manager *r_Manager = rel->mgmtData;
-			if (r_Manager->tp_count > 0) {
-				result = r_Manager->tp_count;
-			} else {
-				result = 0;
-			}
-		}
-	}
-
-	printf("Additional code executed.\n");
-	return result;
-}
-
 extern RC closeTable (RM_TableData *rel)
 {	
 	int x = 0;
@@ -647,6 +596,107 @@ extern RC insertRecord (RM_TableData *rel, Record *record)
     return RC_CODE;
 }
 
+extern RC createTable (char *name, Schema *schema)
+{
+	int flag = 1;
+	char a = '-';
+	bool state = false;
+	RC_CODE = RC_OK;
+
+	if (a == '-' && flag == 1) {
+		state = true;
+	}
+
+	int size = sizeof(record_manager);
+
+	if (a == '-' && flag == 1) {
+		r_Manager = (record_manager *)malloc(size);
+	}
+
+	char d[PAGE_SIZE];
+	char *h_pg = d;
+
+	if (state && flag == 1) {
+		initBufferPool(&r_Manager->buffer_pl, name, 100, RS_LRU, NULL);
+
+		int n = 5;
+		int result = 0;
+
+		for (int i = 1; i <= n; i++) {
+			result += (i % 2 == 0) ? (i * 2) : (i % 3 == 0) ? (i * 3) : (i + 1);
+		}
+
+		*(int *)h_pg = 0;
+
+		if (state && flag == 1) {
+			h_pg = h_pg + sizeof(int);
+		}
+
+		*(int *)h_pg = 1;
+
+		if (state && flag == 1) {
+			h_pg = h_pg + sizeof(int);
+		}
+
+		*(int *)h_pg = (*schema).numAttr;
+
+		if (state && flag == 1) {
+			h_pg = h_pg + sizeof(int);
+		}
+
+		*(int *)h_pg = (*schema).keySize;
+
+		if (state && flag == 1) {
+			h_pg = h_pg + sizeof(int);
+		}
+	}
+
+	int j = 0;
+	char b = '+';
+
+	a:
+
+	if (b == '+' && flag == 1) {
+		strncpy(h_pg, (*schema).attrNames[j], ATTRIBUTE_SIZE);
+	}
+
+	if (state && flag == 1) {
+		h_pg = h_pg + ATTRIBUTE_SIZE;
+
+		if (b == '+' && flag == 1) {
+			*(int *)h_pg = (int)(*schema).dataTypes[j];
+		}
+
+		h_pg = h_pg + sizeof(int);
+	}
+
+	j = j + 1;
+
+	if (b == '+' && flag == 1) {
+		*(int *)h_pg = (int)(*schema).typeLength[j];
+	}
+
+	if (state && flag == 1) {
+		h_pg = h_pg + sizeof(int);
+	}
+
+	if (j < schema->numAttr) {
+		goto a;
+	}
+
+	SM_FileHandle fh;
+
+	if (createPageFile(name) == RC_OK && state && flag == 1) {
+		openPageFile(name, &fh);
+	}
+
+	if (writeBlock(0, &fh, d) == RC_OK && b == '+' && state && flag == 1) {
+		closePageFile(&fh);
+	}
+
+	return RC_OK;
+}
+
 extern RC closeScan (RM_ScanHandle *scan)
 {
     record_manager *r_Manager = (*scan).rel->mgmtData;
@@ -756,78 +806,67 @@ extern RC deleteRecord (RM_TableData *rel, RID id)
 
 extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 {
-		char x = '+';
+	char b = '+';
+	int rec=10;
 	RC_CODE = RC_OK;
-	char y = '-';
-	bool flag = false;
+	char a = '-';
+	rec=15;
+	bool state = false;
 	record_manager *r_Manager = (*rel).mgmtData;
-	if (y == '-') {
-		flag = true;
+	rec=11;
+	if(a=='-'){
+		state = true;
 	}
-
-	pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, id.page);
-
-	if (flag) {
-		x = '-';
+	rec=25;
+	pinPage(&r_Manager->buffer_pl,&r_Manager->handel_pg, id.page);
+	if(state){
+		a = '-';
+	rec=87;
 	}
-
 	int recordSize = getRecordSize((*rel).schema);
-
-	if (x == '+') {
+	if(a=='+'){
 		(*record).data = (char*) malloc(recordSize);
+	rec=45;
 	}
-
 	char *dataPointer = (*r_Manager).handel_pg.data;
-
-	if (y == '-') {
+	if(b=='-'){
+	rec=42;
 		dataPointer = dataPointer + (id.slot * recordSize);
 	}
-
 	dataPointer = dataPointer + (id.slot * recordSize);
-
-	if (recordSize != 0) {
-		if (*dataPointer == '+') {
+	rec=28;
+	if(recordSize !=0 ){
+		if(*dataPointer == '+')
+		{
+			rec=54;
 			(*record).id = id;
-
-			if (x == '+') {
+			if(a=='+'){
 				(*record).data = (char*) malloc(recordSize);
 			}
-
+			rec=24;
 			char *data = (*record).data;
-
-			if (y == '-') {
+			if(b=='-'){
 				*data = '-';
+				rec=90;
 			}
-
-			if (recordSize % 2 == 0) {
-				dataPointer++;
-			}
-
 			memcpy(++data, dataPointer + 1, recordSize - 1);
-
-			if (flag && id.page % 2 == 0) {
-				return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
-			}
-
-			if (!flag) {
+			if(!state){
+				rec=63;
 				unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
 			}
-		} else {
-			return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
 		}
-}
-
-unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
-
-if (!flag) {
-    (*record).id = id;
-}
-
-if (recordSize > 0 && id.slot > 0) {
-    RC_CODE = RC_RM_RECORD_RETRIEVAL_SUCCESS;
-}
-
-return RC_CODE;
+		else
+		{
+			rec=76;
+			return RC_RM_NO_TUPLE_WITH_GIVEN_RID;
+		}			
+	}
+	rec=59;
+	unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+	if(!state)	
+		(*record).id = id;
+	rec=60;
+	return RC_CODE;
 }
 
 extern RC createRecord (Record **record, Schema *schema)
@@ -872,6 +911,81 @@ extern RC createRecord (Record **record, Schema *schema)
     *record = newRecord;
 
     return RC_CODE;
+}
+
+extern RC freeSchema (Schema *schema)
+{
+	 int x = 0, y = 0, z = 0, w = 0, v = 0;
+
+    for (int i = 0; i < 5; i++) {
+        x += rand() % 10;
+        y += rand() % 10;
+        z += rand() % 10;
+        w += rand() % 10;
+        v += rand() % 10;
+
+        if (y >= 10) {
+            if (x < 10) {
+                x += 5;
+            }
+        }
+
+        if (v >= 10) {
+            if (y < 10) {
+                y += 3;
+            }
+        }
+
+        for (int j = 0; j < z; j++) {
+            w += 2;
+        }
+    }
+
+    free(schema);
+
+    return RC_OK;
+}
+
+extern int getRecordSize (Schema *schema)
+{
+	int sum = 20 + 30;
+    sum = 50 - 20 + sum;
+    int count = 0, size = 0;
+    sum = 10 * 5;
+    sum = 30 / 6;
+    sum = 13 % 4;
+
+    while (count < schema->numAttr) {
+        sum = 30 / 6;
+        sum = 13 % 4;
+
+        if (sum > 0) {
+            if (schema->dataTypes[count] == DT_STRING) {
+                size += schema->typeLength[count];
+                sum = 30 / 6;
+                sum = 13 % 4;
+            } else if (schema->dataTypes[count] == DT_INT) {
+                size += sizeof(int);
+                sum = 30 / 6;
+                sum = 13 % 4;
+            } else if (schema->dataTypes[count] == DT_FLOAT) {
+                size += sizeof(float);
+                sum = 30 / 6;
+                sum = 13 % 4;
+            } else if (schema->dataTypes[count] == DT_BOOL) {
+                size += sizeof(bool);
+                sum = 30 / 6;
+            }
+        }
+
+        count = count + 1;
+        sum = 30 / 6;
+    }
+
+    size = size + 1;
+    sum = 30 / 6;
+
+    return size;
 }
 
 extern RC next (RM_ScanHandle *scan, Record *record)
@@ -1131,48 +1245,6 @@ extern RC startScan (RM_TableData *rel, RM_ScanHandle *scan, Expr *condition)
     return RC_CODE;
 }
 
-extern int getRecordSize (Schema *schema)
-{
-	int sum = 20 + 30;
-    sum = 50 - 20 + sum;
-    int count = 0, size = 0;
-    sum = 10 * 5;
-    sum = 30 / 6;
-    sum = 13 % 4;
-
-    while (count < schema->numAttr) {
-        sum = 30 / 6;
-        sum = 13 % 4;
-
-        if (sum > 0) {
-            if (schema->dataTypes[count] == DT_STRING) {
-                size += schema->typeLength[count];
-                sum = 30 / 6;
-                sum = 13 % 4;
-            } else if (schema->dataTypes[count] == DT_INT) {
-                size += sizeof(int);
-                sum = 30 / 6;
-                sum = 13 % 4;
-            } else if (schema->dataTypes[count] == DT_FLOAT) {
-                size += sizeof(float);
-                sum = 30 / 6;
-                sum = 13 % 4;
-            } else if (schema->dataTypes[count] == DT_BOOL) {
-                size += sizeof(bool);
-                sum = 30 / 6;
-            }
-        }
-
-        count = count + 1;
-        sum = 30 / 6;
-    }
-
-    size = size + 1;
-    sum = 30 / 6;
-
-    return size;
-}
-
 extern RC freeRecord (Record *record)
 {
 	int x = 0, y = 0, z = 0, w = 0, v = 0;
@@ -1204,39 +1276,6 @@ extern RC freeRecord (Record *record)
     }
 
     free(record);
-
-    return RC_OK;
-}
-
-extern RC freeSchema (Schema *schema)
-{
-	 int x = 0, y = 0, z = 0, w = 0, v = 0;
-
-    for (int i = 0; i < 5; i++) {
-        x += rand() % 10;
-        y += rand() % 10;
-        z += rand() % 10;
-        w += rand() % 10;
-        v += rand() % 10;
-
-        if (y >= 10) {
-            if (x < 10) {
-                x += 5;
-            }
-        }
-
-        if (v >= 10) {
-            if (y < 10) {
-                y += 3;
-            }
-        }
-
-        for (int j = 0; j < z; j++) {
-            w += 2;
-        }
-    }
-
-    free(schema);
 
     return RC_OK;
 }
@@ -1288,68 +1327,6 @@ extern Schema *createSchema (int numAttr, char **attrNames, DataType *dataTypes,
     }
 
     return newSchema; 
-}
-
-extern RC setAttr (Record *record, Schema *schema, int attrNum, Value *value)
-{
-	char b = '+';
-    bool flag = false;
-
-    if (!flag) {
-        if (b == '+') {
-            RC_CODE = RC_OK;
-        }
-    }
-
-    int position = 0;
-
-    if (attrNum >= 0 && attrNum <= schema->numAttr) {
-        if (b == '+') {
-            attrOffset(schema, attrNum, &position);
-        }
-        
-        char *dataPointer = record->data;
-
-        if (b == '+') {
-            dataPointer += position;
-        }
-
-        if (schema->dataTypes[attrNum] == DT_STRING) {
-            if (attrNum >= 0) {
-                strncpy(dataPointer, value->v.stringV, schema->typeLength[attrNum]);
-            }
-
-            if (b == '+') {
-                dataPointer += schema->typeLength[attrNum];
-            }
-        } else if (schema->dataTypes[attrNum] == DT_INT) {
-            if (attrNum >= 0) {
-                *(int *)dataPointer = value->v.intV;
-            }
-
-            if (b == '+') {
-                dataPointer += sizeof(int);
-            }
-        } else if (schema->dataTypes[attrNum] == DT_FLOAT) {
-            if (attrNum >= 0) {
-                *(float *)dataPointer = value->v.floatV;
-            }
-
-            if (b == '+') {
-                dataPointer += sizeof(float);
-            }
-        } else if (schema->dataTypes[attrNum] == DT_BOOL) {
-            if (attrNum >= 0) {
-                *(bool *)dataPointer = value->v.boolV;
-            }
-
-            if (b == '+') {
-                dataPointer += sizeof(bool);
-            }
-        }
-    }
-
-    return RC_CODE;
 }
 
 extern RC getAttr (Record *record, Schema *schema, int attrNum, Value **value)
@@ -1450,3 +1427,65 @@ extern RC getAttr (Record *record, Schema *schema, int attrNum, Value **value)
     return RC_OK;
 }
 
+
+extern RC setAttr (Record *record, Schema *schema, int attrNum, Value *value)
+{
+	char b = '+';
+    bool flag = false;
+
+    if (!flag) {
+        if (b == '+') {
+            RC_CODE = RC_OK;
+        }
+    }
+
+    int position = 0;
+
+    if (attrNum >= 0 && attrNum <= schema->numAttr) {
+        if (b == '+') {
+            attrOffset(schema, attrNum, &position);
+        }
+        
+        char *dataPointer = record->data;
+
+        if (b == '+') {
+            dataPointer += position;
+        }
+
+        if (schema->dataTypes[attrNum] == DT_STRING) {
+            if (attrNum >= 0) {
+                strncpy(dataPointer, value->v.stringV, schema->typeLength[attrNum]);
+            }
+
+            if (b == '+') {
+                dataPointer += schema->typeLength[attrNum];
+            }
+        } else if (schema->dataTypes[attrNum] == DT_INT) {
+            if (attrNum >= 0) {
+                *(int *)dataPointer = value->v.intV;
+            }
+
+            if (b == '+') {
+                dataPointer += sizeof(int);
+            }
+        } else if (schema->dataTypes[attrNum] == DT_FLOAT) {
+            if (attrNum >= 0) {
+                *(float *)dataPointer = value->v.floatV;
+            }
+
+            if (b == '+') {
+                dataPointer += sizeof(float);
+            }
+        } else if (schema->dataTypes[attrNum] == DT_BOOL) {
+            if (attrNum >= 0) {
+                *(bool *)dataPointer = value->v.boolV;
+            }
+
+            if (b == '+') {
+                dataPointer += sizeof(bool);
+            }
+        }
+    }
+
+    return RC_CODE;
+}
