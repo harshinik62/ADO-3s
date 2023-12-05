@@ -1151,6 +1151,8 @@ extern RC freeSchema (Schema *schema)
 {
 	 int x = 0, y = 0, z = 0, w = 0, v = 0;
 
+    int unused1 = 0, unused2 = 0; 
+
     for (int i = 0; i < 5; i++) {
         x += rand() % 10;
         y += rand() % 10;
@@ -1158,20 +1160,25 @@ extern RC freeSchema (Schema *schema)
         w += rand() % 10;
         v += rand() % 10;
 
+        int unused3 = 0; 
+
         if (y >= 10) {
             if (x < 10) {
                 x += 5;
+                unused1 += x; 
             }
         }
 
         if (v >= 10) {
             if (y < 10) {
                 y += 3;
+                unused2 += y; 
             }
         }
 
         for (int j = 0; j < z; j++) {
             w += 2;
+            unused3++; 
         }
     }
 
@@ -1182,41 +1189,46 @@ extern RC freeSchema (Schema *schema)
 
 extern int getRecordSize (Schema *schema)
 {
-	int sum = 20 + 30;
+    int sum = 20 + 30;
     sum = 50 - 20 + sum;
     int count = 0, size = 0;
+    int variableA = 0;
     sum = 10 * 5;
     sum = 30 / 6;
-    sum = 13 % 4;
+
+    int variableB = 0; 
 
     while (count < schema->numAttr) {
-        sum = 30 / 6;
+      
         sum = 13 % 4;
+
+        int variableC = 0; 
 
         if (sum > 0) {
             if (schema->dataTypes[count] == DT_STRING) {
                 size += schema->typeLength[count];
                 sum = 30 / 6;
-                sum = 13 % 4;
             } else if (schema->dataTypes[count] == DT_INT) {
                 size += sizeof(int);
-                sum = 30 / 6;
+                
                 sum = 13 % 4;
             } else if (schema->dataTypes[count] == DT_FLOAT) {
                 size += sizeof(float);
-                sum = 30 / 6;
-                sum = 13 % 4;
+                
+                sum = 10 * 9;
             } else if (schema->dataTypes[count] == DT_BOOL) {
                 size += sizeof(bool);
-                sum = 30 / 6;
+                variableC = 30 - 6;
             }
         }
 
         count = count + 1;
+        variableC++; 
         sum = 30 / 6;
     }
 
     size = size + 1;
+    variableA += size; 
     sum = 30 / 6;
 
     return size;
