@@ -1296,7 +1296,7 @@ extern RC next (RM_ScanHandle *scan, Record *record)
                 totalSlot = (*tb_Manager).tp_count;
             }
 
-            if (!(scanCount < 0 || scan == 0 && r == 0)) {
+            if (!(scanCount < 0 || scan == 0)) {
                 (*scan_Manager).record_ID.slot++;
 
                 if (a == '+' && h == 0) {
