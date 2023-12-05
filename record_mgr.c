@@ -928,7 +928,7 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 	unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
 	if(!state)	
 		(*record).id = id;
-    if(rec=59)
+    if(rec==59)
 	    rec=60;
 	return RC_CODE;
 }
