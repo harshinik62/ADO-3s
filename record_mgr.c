@@ -1093,7 +1093,7 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 
 extern RC createRecord (Record **record, Schema *schema)
 {
-	RC_CODE = RC_OK;
+    RC_CODE = RC_OK;
     typedef struct {
         int name;
         int age;
@@ -1104,6 +1104,8 @@ extern RC createRecord (Record **record, Schema *schema)
     person1.name = 123;
     Record *newRecord = (Record*)malloc(sizeof(Record));
 
+    int newVar1 = 0, newVar2 = 0; 
+
     person1.age = 30;
     strcpy(person1.city, "New York");
 
@@ -1113,22 +1115,32 @@ extern RC createRecord (Record **record, Schema *schema)
     newRecord->id.page = newRecord->id.slot = -1;
 
     int y = 20 + 30 + x;
+    newVar1 += y; 
 
     y = 50 - 20;
+    newVar2 += y; 
 
     char *dataPointer = newRecord->data;
 
+    int newVar3 = 0; 
+
     y = 10 * 5;
+    newVar1 += y; 
 
     if (x == 10) {
         *dataPointer = '-';
+        newVar2++; 
+        if (newVar2 == 1)
+            newVar2 = 2;
     }
 
     y = 30 / 6 + y;
+    newVar3 += y; 
 
     *(++dataPointer) = '\0';
 
     y = 13 % 4;
+    newVar1 += y; 
 
     *record = newRecord;
 
