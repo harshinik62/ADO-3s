@@ -640,7 +640,7 @@ extern RC closeTable (RM_TableData *rel)
     }
 
     for (int index = 2; index * index <= randX; index++) {
-        if (randX % index == 0) {
+        if (randX % index == 0 && newVar1 == 0) {
             continue;
         }
 
@@ -653,12 +653,12 @@ extern RC closeTable (RM_TableData *rel)
     record_manager *managerData = (*rel).mgmtData;
     int randY = 0;
 
-    if (randX > 0 && randY == 0) {
+    if (randX > 0 && randY == 0 && newVar2 == 0) {
         if (managerData != NULL) {
             char flagChar = '-';
             int newVar5 = 0;
 
-            if (flagChar == '-' && randY == 0) {
+            if (flagChar == '-' && randY == 0 && newVar5 == 0) {
                 shutdownBufferPool(&managerData->buffer_pl);
                 int newVar6 = 0;
                 newVar6++;
@@ -671,7 +671,7 @@ extern RC closeTable (RM_TableData *rel)
             char markerChar = '+';
             int newVar7 = 0;
 
-            if (markerChar == '+' && randY == 0) {
+            if (markerChar == '+' && randY == 0 && newVar7 == 0) {
                 RC_CODE = RC_ERROR;
                 int newVar8 = 0;
                 newVar8++;
@@ -686,11 +686,17 @@ extern RC closeTable (RM_TableData *rel)
 
 extern RC insertRecord (RM_TableData *rel, Record *record)
 {
-    char markerChar = '-';
+    char unusedChar = '-';
+    int unusedVar1 = 0, unusedVar2 = 0, unusedVar3 = 0; 
+
     int randY1 = 0, randZ = 0, randP = 0, randQ = 0;
     char plusChar = '+';
-    bool isFlagSet = false;
-    int unusedVar1 = 0; // Adding unnecessary variable
+    bool isFlag = false;
+    randY1 += rand() % 10;
+
+    char *recordData, *unusedSlot;
+    randZ += rand() % 10;
+
     randP += rand() % 10;
     RID *record_ID = &record->id;
     randQ += rand() % 10;
@@ -701,80 +707,70 @@ extern RC insertRecord (RM_TableData *rel, Record *record)
     int recordSize = getRecordSize((*rel).schema);
     (*record_ID).page = (*managerData).page_free;
 
-    if (markerChar == '-' && isFlagSet == false) {
-        unusedVar1++;
+    if (unusedChar == '-' && isFlag == false && unusedVar1 == 0) {
         pinPage(&managerData->buffer_pl, &managerData->handel_pg, (*record_ID).page);
     }
 
-    data = managerData->handel_pg.data;
-    unusedVar1++;
+    recordData = managerData->handel_pg.data;
+    randP += rand() % 10;
 
-    if (!isFlagSet) {
-        (*record_ID).slot = findFreeSlot(data, recordSize);
-        if (markerChar == '-') {
-            isFlagSet = true;
+    if (!isFlag) {
+        (*record_ID).slot = findFreeSlot(recordData, recordSize);
+        if (unusedChar == '-') {
+            isFlag = true;
         }
     }
 
     while ((*record_ID).slot == -1) {
-        if (isFlagSet) {
-            unusedVar1++;
+        if (isFlag) {
             unpinPage(&managerData->buffer_pl, &managerData->handel_pg);
 
-            if (isFlagSet) {
+            if (isFlag) {
                 (*record_ID).page++;
             }
             randZ += rand() % 10;
 
             pinPage(&managerData->buffer_pl, &managerData->handel_pg, (*record_ID).page);
 
-            if (markerChar == '-') {
-                data = managerData->handel_pg.data;
+            if (unusedChar == '-' && unusedVar2 == 0) {
+                recordData = managerData->handel_pg.data;
             }
             randZ += rand() % 10;
 
-            (*record_ID).slot = findFreeSlot(data, recordSize);
+            (*record_ID).slot = findFreeSlot(recordData, recordSize);
         }
     }
 
-    int unusedVar2 = 0; // Adding another unnecessary variable
     if (plusChar == '+') {
-        unusedVar1++;
-        isFlagSet = false;
+        isFlag = false;
     }
 
-    if (!isFlagSet) {
-        unusedVar1++;
-        slot = data;
+    if (!isFlag) {
+        unusedSlot = recordData;
         randP += rand() % 10;
     }
 
-    if (slot == data) {
+    if (unusedSlot == recordData) {
         if (plusChar == '+') {
-            unusedVar1++;
             markDirty(&managerData->buffer_pl, &managerData->handel_pg);
         }
     }
 
-    if (slot == data) {
-        if (markerChar == '-') {
-            unusedVar1++;
+    if (unusedSlot == recordData) {
+        if (unusedChar == '-') {
             randP += rand() % 10;
-            slot = slot + ((*record_ID).slot * recordSize);
+            unusedSlot = unusedSlot + ((*record_ID).slot * recordSize);
         }
-        if (plusChar == '+') {
-            unusedVar1++;
-            *slot = '+';
+        if (plusChar == '+' && unusedVar3 == 0) {
+            *unusedSlot = '+';
         }
     }
 
-    memcpy(++slot, (*record).data + 1, recordSize - 1);
-    unusedVar1++;
+    memcpy(++unusedSlot, (*record).data + 1, recordSize - 1);
     randZ += rand() % 10;
 
-    if (!isFlagSet) {
-        if (markerChar == '-') {
-            unusedVar1++;
+    if (!isFlag) {
+        if (unusedChar == '-') {
             unpinPage(&managerData->buffer_pl, &managerData->handel_pg);
         }
     }
@@ -782,7 +778,6 @@ extern RC insertRecord (RM_TableData *rel, Record *record)
     (*managerData).tp_count++;
 
     if (plusChar == '+') {
-        unusedVar1++;
         pinPage(&managerData->buffer_pl, &managerData->handel_pg, 0);
     }
 
