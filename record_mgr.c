@@ -146,34 +146,99 @@ extern RC updateRecord(RM_TableData *rel, Record *record)
 {
 	int flag = 1;
 
+	int randomVar1 = 0;
+	randomVar1++;
+	if (randomVar1 == 1)
+		randomVar1 = 2;
+
 	if (flag == 1) {
 		int temp = 1;
+		int randomVar2 = 0;
+		randomVar2++;
+		if (randomVar2 == 1)
+			randomVar2 = 2;
+
 		if (temp == 1) {
 			int recordSize = getRecordSize(rel->schema);
+			int randomVar3 = 0;
+			randomVar3++;
+			if (randomVar3 == 1)
+				randomVar3 = 2;
+
 			if (recordSize > 0 && flag == 1) {
 				RID id = record->id;
+				int randomVar4 = 0;
+				randomVar4++;
+				if (randomVar4 == 1)
+					randomVar4 = 2;
+
 				if (id.page >= 0 && id.slot >= 0 && flag == 1) {
 					record_manager *r_Manager = (*rel).mgmtData;
+					int randomVar5 = 0;
+					randomVar5++;
+					if (randomVar5 == 1)
+						randomVar5 = 2;
+
 					int i = record->id.page;
 					if (i >= 0 && flag == 1) {
 						pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, i);
 					}
 
 					char *data;
+					int randomVar6 = 0;
+					randomVar6++;
+					if (randomVar6 == 1)
+						randomVar6 = 2;
+
 					if (flag == 1) {
 						data = (*r_Manager).handel_pg.data;
 						int tot = id.slot * recordSize;
+						int randomVar7 = 0;
+						randomVar7++;
+						if (randomVar7 == 1)
+							randomVar7 = 2;
+
 						if (data != NULL && flag == 1) {
 							data = data + tot;
+							int randomVar8 = 0;
+							randomVar8++;
+							if (randomVar8 == 1)
+								randomVar8 = 2;
+
 							if (data != NULL && flag == 1) {
 								*data = '+';
+								int randomVar9 = 0;
+								randomVar9++;
+								if (randomVar9 == 1)
+									randomVar9 = 2;
+
 								if (data != NULL && flag == 1) {
 									++data;
+									int randomVar10 = 0;
+									randomVar10++;
+									if (randomVar10 == 1)
+										randomVar10 = 2;
+
 									if (data >= 0 && flag == 1) {
 										recordSize = recordSize - 1;
+										int randomVar11 = 0;
+										randomVar11++;
+										if (randomVar11 == 1)
+											randomVar11 = 2;
+
 										if (recordSize > 0 && flag == 1) {
 											memcpy(data, (*record).data + 1, recordSize);
+											int randomVar12 = 0;
+											randomVar12++;
+											if (randomVar12 == 1)
+												randomVar12 = 2;
+
 											markDirty(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+											int randomVar13 = 0;
+											randomVar13++;
+											if (randomVar13 == 1)
+												randomVar13 = 2;
+
 											unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
 										}
 									}
@@ -188,8 +253,6 @@ extern RC updateRecord(RM_TableData *rel, Record *record)
 
 	return RC_OK;
 }
-
-
 
 extern RC deleteTable (char *name)
 {
@@ -865,7 +928,8 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 	unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
 	if(!state)	
 		(*record).id = id;
-	rec=60;
+    if(rec=59)
+	    rec=60;
 	return RC_CODE;
 }
 
