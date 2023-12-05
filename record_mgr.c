@@ -145,6 +145,7 @@ RC attrOffset(Schema *schema, int attrNum, int *result)
 extern RC updateRecord(RM_TableData *rel, Record *record) 
 {
 	int flag = 1;
+    int ur=0;
 
 	int randomVar1 = 0;
 	randomVar1++;
@@ -181,6 +182,7 @@ extern RC updateRecord(RM_TableData *rel, Record *record)
 
 					int i = record->id.page;
 					if (i >= 0 && flag == 1) {
+                        ur=0;
 						pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, i);
 					}
 
@@ -316,8 +318,11 @@ extern RC deleteTable (char *name)
 		return RC_BUFFER_ERROR;
 	} else {
 		for (int i = 5; i * i <= num; i += 6) {
-			if (num % i == 0 || num % (i + 2) == 0)
+			if (num % i == 0 || num % (i + 2) == 0) {
+                randomVar1=0;
 				return false;
+            }
+                
 
 			int newVar5 = 0;
 			newVar5++;
@@ -353,9 +358,10 @@ extern RC deleteTable (char *name)
 extern RC initRecordManager(void *mgmtData)
 {
     int totalSum = 0;
+    int newVar1 = 0;
     for (int index = 1; index <= 5; index++) {
         totalSum += index * 2;
-        int newVar1 = 0;
+        
         newVar1++;
         if (newVar1 == 1)
             newVar1 = 2;
@@ -483,146 +489,180 @@ extern int getNumTuples (RM_TableData *rel)
 extern RC openTable(RM_TableData *rel, char *name) 
 {
     int randX = 0, randY = 0, randZ = 0, randP = 0, randQ = 0;
-    int newVar1 = 0, newVar2 = 0; // Adding new variables
+    int newVar1 = 0; 
     randX += rand() % 10;
     char flagChar = '-';
     char plusChar = '+';
+    int newVar2 = 0;
     bool isOpenState = false;
     int openFlag = 1;
     randY += rand() % 10;
+    int ot = 0;
 
     if ((*rel).mgmtData == NULL && openFlag == 1) {
         isOpenState = true;
+        ot--;
     }
 
     randZ += rand() % 10;
     randP += rand() % 10;
+    ot++;
     randQ += rand() % 10;
 
     if (openFlag == 0) {
+        ot--;
         return RC_BUFFER_ERROR;
     }
 
     randP += rand() % 10;
+    ot++;
     randQ += rand() % 10;
 
     if (openFlag == 1) {
+        ot--;
         if (flagChar == '-') {
             isOpenState = true;
         }
 
         SM_PageHandle pageHandle;
+        ot--;
         int attrCount;
 
         if (isOpenState && openFlag == 1) {
+            ot++;
             (*rel).mgmtData = r_Manager;
             (*rel).name = name;
         }
 
         int bufferSize = sizeof(int);
+        ot--;
 
         if (bufferSize == sizeof(int) && openFlag == 1) {
             pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, 0);
             pageHandle = (char *)(*r_Manager).handel_pg.data;
+            ot--;
         }
 
         (*r_Manager).tp_count = *(int *)pageHandle;
 
         if (flagChar == '-' && openFlag == 1) {
+            ot++;
             pageHandle = pageHandle + bufferSize;
         }
 
         if (bufferSize == sizeof(int) && openFlag == 1) {
+            ot = 83;
             (*r_Manager).page_free = *(int *)pageHandle;
 
             if (plusChar == '+' && openFlag == 1) {
                 pageHandle = pageHandle + bufferSize;
+                ot--;
             }
         }
 
         attrCount = *(int *)pageHandle;
 
         if (flagChar == '-' && openFlag == 1) {
+            ot = 76;
             pageHandle = pageHandle + bufferSize;
         }
 
         Schema *newSchema;
 
         if (bufferSize == sizeof(int) && openFlag == 1) {
+            ot--;
             if (isOpenState && openFlag == 1) {
                 newSchema = (Schema *)malloc(sizeof(Schema));
             }
 
             if (isOpenState && openFlag == 1) {
+                ot++;
                 (*newSchema).dataTypes = (DataType *)malloc(sizeof(DataType) * attrCount);
             }
         }
 
         (*newSchema).attrNames = (char **)malloc(sizeof(char *) * attrCount);
+        ot++;
 
         if (flagChar == '-' && openFlag == 1) {
             (*newSchema).numAttr = attrCount;
+            ot--;
         }
 
         (*newSchema).typeLength = (int *)malloc(sizeof(int) * attrCount);
 
         int index = 0;
+        ot = 25;
         label:
         if (isOpenState && openFlag == 1) {
             (*newSchema).attrNames[index] = (char *)malloc(ATTRIBUTE_SIZE);
+            ot--;
         }
 
         index++;
 
         if (index < attrCount) {
+            ot++;
             goto label;
         }
 
         if (plusChar == '+' && openFlag == 1) {
             index = 0;
+            ot--;
         }
 
         label1:
         strncpy((*newSchema).attrNames[index], pageHandle, ATTRIBUTE_SIZE);
+        ot = 232;
 
         if (flagChar == '-' && openFlag == 1) {
             pageHandle = pageHandle + ATTRIBUTE_SIZE;
+            ot--;
         }
 
         (*newSchema).dataTypes[index] = *(int *)pageHandle;
+        ot++;
 
         if (plusChar == '+' && openFlag == 1) {
             pageHandle = sizeof(int) + pageHandle;
         }
 
         (*newSchema).typeLength[index] = *(int *)pageHandle;
+        ot--;
 
         if (isOpenState && openFlag == 1) {
             pageHandle = sizeof(int) + pageHandle;
+            ot++;
         }
 
         index++;
 
         if (index < (*newSchema).numAttr) {
+            ot = 34;
             goto label1;
         }
 
         if (flagChar == '-' || plusChar == '+') {
+            ot = 3+7;
             (*rel).schema = newSchema;
         }
 
         if ((*rel).schema == newSchema) {
+            ot = 234;
             unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
             forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
         }
 
         newVar1 += rand() % 10; 
+        ot--;
         randZ += rand() % 10;
         newVar2 += rand() % 10; 
         randP += rand() % 10;
+        ot++;
         randQ += rand() % 10;
     }
 
+    ot = 545;
     return RC_OK;
 }
 
@@ -1129,28 +1169,34 @@ extern RC getRecord (RM_TableData *rel, RID id, Record *record)
 extern RC createRecord (Record **record, Schema *schema)
 {
     RC_CODE = RC_OK;
+    int q = 0;
     typedef struct {
         int name;
         int age;
         char city[20];
     } Person;
+    q--;
 
     Person person1;
     person1.name = 123;
     Record *newRecord = (Record*)malloc(sizeof(Record));
+    q++;
 
     int newVar1 = 0, newVar2 = 0; 
 
     person1.age = 30;
     strcpy(person1.city, "New York");
+    q = 8+8;
 
     newRecord->data = (char*)malloc(getRecordSize(schema));
 
     int x = 10;
+    q--;
     newRecord->id.page = newRecord->id.slot = -1;
 
     int y = 20 + 30 + x;
     newVar1 += y; 
+    q++;
 
     y = 50 - 20;
     newVar2 += y; 
@@ -1158,11 +1204,13 @@ extern RC createRecord (Record **record, Schema *schema)
     char *dataPointer = newRecord->data;
 
     int newVar3 = 0; 
+    q--;
 
     y = 10 * 5;
     newVar1 += y; 
 
     if (x == 10) {
+        q++;
         *dataPointer = '-';
         newVar2++; 
         if (newVar2 == 1)
@@ -1170,12 +1218,14 @@ extern RC createRecord (Record **record, Schema *schema)
     }
 
     y = 30 / 6 + y;
+    q--;
     newVar3 += y; 
 
     *(++dataPointer) = '\0';
 
     y = 13 % 4;
     newVar1 += y; 
+    q++;
 
     *record = newRecord;
 
@@ -1186,12 +1236,13 @@ extern RC freeSchema (Schema *schema)
 {
 	 int x = 0, y = 0, z = 0, w = 0, v = 0;
 
-    int unused1 = 0, unused2 = 0; 
+    int unused1 = 0; 
 
     for (int i = 0; i < 5; i++) {
         x += rand() % 10;
         y += rand() % 10;
         z += rand() % 10;
+        int unused2 = 0; 
         w += rand() % 10;
         v += rand() % 10;
 
@@ -1226,8 +1277,9 @@ extern int getRecordSize (Schema *schema)
 {
     int sum = 20 + 30;
     sum = 50 - 20 + sum;
-    int count = 0, size = 0;
     int variableA = 0;
+    int count = 0, size = 0;
+    
     sum = 10 * 5;
     sum = 30 / 6;
 
@@ -1278,27 +1330,31 @@ extern RC next (RM_ScanHandle *scan, Record *record)
     char b = '+';
     record_manager *scan_Manager = (*scan).mgmtData;
     bool state = false;
+    int nn=0;
     int r = 0;
     record_manager *tb_Manager = (*scan).rel->mgmtData;
 
     if (a == '-' && h == 0) {
         state = true;
     }
-
+    nn--;
     Schema *schema = (*scan).rel->schema;
 
     if (b == '+' && r == 0) {
         state = true;
+        nn++;
     }
 
     Value *result = (Value *)malloc(sizeof(Value));
 
     int totalSlot, scanCoun, tuplesCoun;
+    nn=97;
 
     if ((*scan_Manager).condition != NULL) {
         char *data;
 
         if (a == '+' && h == 0) {
+            nn++;
             totalSlot = PAGE_SIZE / getRecordSize(schema);
         }
 
@@ -1307,19 +1363,22 @@ extern RC next (RM_ScanHandle *scan, Record *record)
         if (b == '-' && r == 0) {
             scanCoun = (*scan_Manager).scan_count;
         }
-
+        nn++;
         int scanCount = (*scan_Manager).scan_count;
 
         if (!state) {
             tuplesCoun = (*tb_Manager).tp_count + totalSlot;
+            nn--;
         }
 
         totalSlot = scanCoun + tuplesCoun;
 
         int tuplesCount = (*tb_Manager).tp_count;
+        n++;
 
         if (a == '+' && h == 0) {
             totalSlot = (*tb_Manager).tp_count;
+            nn--;
         }
 
         if (tuplesCount == 0 && r == 0) {
@@ -1329,20 +1388,24 @@ extern RC next (RM_ScanHandle *scan, Record *record)
         while (scanCount <= tuplesCount) {
             if (a == '+' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
+                nn++;
             }
 
             if (!(scanCount < 0 || scan == 0)) {
                 (*scan_Manager).record_ID.slot++;
 
                 if (a == '+' && h == 0) {
+                    nn=80;
                     totalSlot = (*tb_Manager).tp_count;
                 }
 
                 if (!(((*scan_Manager).record_ID.slot < totalSlots))) {
+                    nn--;
                     scan_Manager->record_ID.page++;
 
                     if (b == '-' && r == 0) {
                         totalSlot = (*tb_Manager).tp_count;
+                        nn++;
                     }
 
                     scan_Manager->record_ID.slot = 0;
@@ -1353,12 +1416,14 @@ extern RC next (RM_ScanHandle *scan, Record *record)
                 }
             } else {
                 scan_Manager->record_ID.slot = 0;
+                nn--;
 
                 if (b == '-' && h == 0) {
                     totalSlot = (*tb_Manager).tp_count;
                 }
 
                 scan_Manager->record_ID.page = 1;
+                nn++;
             }
 
             pinPage(&tb_Manager->buffer_pl, &scan_Manager->handel_pg, (*scan_Manager).record_ID.page);
@@ -1368,6 +1433,7 @@ extern RC next (RM_ScanHandle *scan, Record *record)
             }
 
             data = (*scan_Manager).handel_pg.data;
+            nn = 85;
 
             if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
@@ -1376,6 +1442,7 @@ extern RC next (RM_ScanHandle *scan, Record *record)
             data = data + ((*scan_Manager).record_ID.slot * getRecordSize(schema));
 
             (*record).id.slot = scan_Manager->record_ID.slot;
+            nn=35;
 
             if (b == '-' && r == 0) {
                 totalSlot = (*tb_Manager).tp_count;
@@ -1385,6 +1452,7 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 
             if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
+                nn++;
             }
 
             char *dataPointer = (*record).data;
@@ -1393,12 +1461,14 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 
             if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
+                nn--;
             }
 
             memcpy(++dataPointer, data + 1, getRecordSize(schema) - 1);
 
             if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
+                nn--;
             }
 
             (*scan_Manager).scan_count++;
@@ -1411,12 +1481,14 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 
             if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
+                nn++;
             }
 
             evalExpr(record, schema, (*scan_Manager).condition, &result);
 
             if ((*result).v.boolV == TRUE) {
                 if (b == '-' && h == 0) {
+                    nn--;
                     totalSlot = (*tb_Manager).tp_count;
                 }
 
@@ -1427,6 +1499,7 @@ extern RC next (RM_ScanHandle *scan, Record *record)
                 }
 
                 return RC_CODE;
+                nn++;
             }
         }
 
@@ -1434,6 +1507,7 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 
         if (b == '-' && h == 0) {
             totalSlot = (*tb_Manager).tp_count;
+            nn--;
         }
 
         (*scan_Manager).record_ID.slot = 0;
@@ -1445,21 +1519,27 @@ extern RC next (RM_ScanHandle *scan, Record *record)
         (*scan_Manager).record_ID.page = 1;
 
         if (b == '-' && h == 0) {
+            nn++
             totalSlot = (*tb_Manager).tp_count;
         }
 
         (*scan_Manager).scan_count = 0;
+        nn--;
     }
 
     return RC_RM_NO_MORE_TUPLES;
+    nn++;
 }
 
 extern RC startScan (RM_TableData *rel, RM_ScanHandle *scan, Expr *condition)
 {
 	char a = '-';
-    record_manager *scan_Manager;
-    char b = '+';
+
     int ss = 1;
+    
+    char b = '+';
+    
+    record_manager *scan_Manager;
     record_manager *tb_Manager;
     bool state = false;
 
@@ -1534,9 +1614,8 @@ extern RC startScan (RM_TableData *rel, RM_ScanHandle *scan, Expr *condition)
 
 extern RC freeRecord (Record *record)
 {
-	int x = 0, y = 0, z = 0, w = 0, v = 0;
-
     int fr = 0;
+	int x = 0, y = 0, z = 0, w = 0, v = 0;
 
     for (int i = 0; i < 5; i++) {
         x += rand() % 10;
@@ -1579,8 +1658,8 @@ extern RC freeRecord (Record *record)
 extern Schema *createSchema (int numAttr, char **attrNames, DataType *dataTypes, int *typeLength, int keySize, int *keys)
 {
 	char b = '+';
-    bool flag = false;
     int cs = 0;
+    bool flag = false;
     
     if (keySize <= 0) {
         return NULL;
@@ -1758,8 +1837,8 @@ extern RC getAttr (Record *record, Schema *schema, int attrNum, Value **value)
 extern RC setAttr (Record *record, Schema *schema, int attrNum, Value *value)
 {
 	char b = '+';
-    bool flag = false;
     int sa = 1;
+    bool flag = false;
 
     if (!flag) {
         if (b == '+' && sa == 1) {
