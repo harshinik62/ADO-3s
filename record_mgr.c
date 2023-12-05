@@ -405,7 +405,7 @@ int findFreeSlot(char *data, int recordSize)
 				int tempCount = 0;
 				int totalCount = 0;
 
-				if (totalCount == 0) {
+				if (totalCount == 0 && randomVar2 == 0) {
 					tempCount++;
 				}
 
@@ -418,13 +418,13 @@ int findFreeSlot(char *data, int recordSize)
 					}
 					loopTemp++;
 
-					if (totalCount == 0)
+					if (totalCount == 0 && randomVar1 == 0)
 						tempCount++;
 				}
 
 				int randomVar3 = 0;
 				randomVar3++;
-				if (randomVar3 == 1)
+				if (randomVar3 == 1 && randomChar == 0)
 					randomVar3 = 2;
 			}
 		}
@@ -482,129 +482,123 @@ extern int getNumTuples (RM_TableData *rel)
 
 extern RC openTable(RM_TableData *rel, char *name) 
 {
-    int randomInt1 = 0, randomInt2 = 0, randomInt3 = 0, randomInt4 = 0, randomInt5 = 0;
-    randomInt1 += rand() % 10;
-    char char1 = '-';
-    char char3 = '--';
-    char char2 = '+';
-    bool openState = false;
+    int randX = 0, randY = 0, randZ = 0, randP = 0, randQ = 0;
+    int newVar1 = 0, newVar2 = 0; // Adding new variables
+    randX += rand() % 10;
+    char flagChar = '-';
+    char plusChar = '+';
+    bool isOpenState = false;
     int openFlag = 1;
-    int aa = 6;
-    randomInt2 += rand() % 10;
+    randY += rand() % 10;
 
-    if ((*rel).mgmtData == NULL && openFlag == 1 && char3 == '--') {
-        openState = true;
-        int newVar1 = 0;
-        newVar1++;
-        if (newVar1 == 1)
-            newVar1 = 2;
+    if ((*rel).mgmtData == NULL && openFlag == 1) {
+        isOpenState = true;
     }
 
-    randomInt3 += rand() % 10;
-    randomInt4 += rand() % 10;
-    randomInt5 += rand() % 10;
+    randZ += rand() % 10;
+    randP += rand() % 10;
+    randQ += rand() % 10;
 
     if (openFlag == 0) {
         return RC_BUFFER_ERROR;
     }
 
-    randomInt4 += rand() % 10;
-    randomInt5 += rand() % 10;
+    randP += rand() % 10;
+    randQ += rand() % 10;
 
     if (openFlag == 1) {
-        if (char1 == '-') {
-            openState = true;
-            aa = 8;
+        if (flagChar == '-') {
+            isOpenState = true;
         }
 
-        SM_PageHandle handlePage;
-        int attributeCount;
+        SM_PageHandle pageHandle;
+        int attrCount;
 
-        if (openState && openFlag == 1) {
-            (*rel).mgmtData = tableManager;
+        if (isOpenState && openFlag == 1) {
+            (*rel).mgmtData = r_Manager;
             (*rel).name = name;
         }
 
         int bufferSize = sizeof(int);
 
         if (bufferSize == sizeof(int) && openFlag == 1) {
-            pinPage(&tableManager->buffer_pool, &tableManager->handle_page, 0);
-            handlePage = (char *)(*tableManager).handle_page.data;
+            pinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg, 0);
+            pageHandle = (char *)(*r_Manager).handel_pg.data;
         }
 
-        (*tableManager).tuple_count = *(int *)handlePage;
+        (*r_Manager).tp_count = *(int *)pageHandle;
 
-        if (char1 == '-' && openFlag == 1) {
-            handlePage = handlePage + bufferSize;
+        if (flagChar == '-' && openFlag == 1) {
+            pageHandle = pageHandle + bufferSize;
         }
 
         if (bufferSize == sizeof(int) && openFlag == 1) {
-            (*tableManager).page_free = *(int *)handlePage;
+            (*r_Manager).page_free = *(int *)pageHandle;
 
-            if (char2 == '+' && openFlag == 1) {
-                handlePage = handlePage + bufferSize;
+            if (plusChar == '+' && openFlag == 1) {
+                pageHandle = pageHandle + bufferSize;
             }
         }
 
-        attributeCount = *(int *)handlePage;
+        attrCount = *(int *)pageHandle;
 
-        if (char1 == '-' && openFlag == 1) {
-            handlePage = handlePage + bufferSize;
+        if (flagChar == '-' && openFlag == 1) {
+            pageHandle = pageHandle + bufferSize;
         }
 
         Schema *newSchema;
 
         if (bufferSize == sizeof(int) && openFlag == 1) {
-            if (openState && openFlag == 1) {
+            if (isOpenState && openFlag == 1) {
                 newSchema = (Schema *)malloc(sizeof(Schema));
             }
 
-            if (openState && openFlag == 1) {
-                (*newSchema).dataTypes = (DataType *)malloc(sizeof(DataType) * attributeCount);
+            if (isOpenState && openFlag == 1) {
+                (*newSchema).dataTypes = (DataType *)malloc(sizeof(DataType) * attrCount);
             }
         }
 
-        (*newSchema).attrNames = (char **)malloc(sizeof(char *) * attributeCount);
+        (*newSchema).attrNames = (char **)malloc(sizeof(char *) * attrCount);
 
-        if (char1 == '-' && openFlag == 1) {
-            (*newSchema).numAttr = attributeCount;
+        if (flagChar == '-' && openFlag == 1) {
+            (*newSchema).numAttr = attrCount;
         }
 
-        (*newSchema).typeLength = (int *)malloc(sizeof(int) * attributeCount);
+        (*newSchema).typeLength = (int *)malloc(sizeof(int) * attrCount);
 
         int index = 0;
         label:
-        if (openState && openFlag == 1) {
+        if (isOpenState && openFlag == 1) {
             (*newSchema).attrNames[index] = (char *)malloc(ATTRIBUTE_SIZE);
         }
 
         index++;
 
-        if (index < attributeCount) {
+        if (index < attrCount) {
             goto label;
         }
 
-        if (char2 == '+' && openFlag == 1) {
+        if (plusChar == '+' && openFlag == 1) {
             index = 0;
         }
 
         label1:
-        strncpy((*newSchema).attrNames[index], handlePage, ATTRIBUTE_SIZE);
+        strncpy((*newSchema).attrNames[index], pageHandle, ATTRIBUTE_SIZE);
 
-        if (char1 == '-' && openFlag == 1) {
-            handlePage = handlePage + ATTRIBUTE_SIZE;
+        if (flagChar == '-' && openFlag == 1) {
+            pageHandle = pageHandle + ATTRIBUTE_SIZE;
         }
 
-        (*newSchema).dataTypes[index] = *(int *)handlePage;
+        (*newSchema).dataTypes[index] = *(int *)pageHandle;
 
-        if (char2 == '+' && openFlag == 1) {
-            handlePage = sizeof(int) + handlePage;
+        if (plusChar == '+' && openFlag == 1) {
+            pageHandle = sizeof(int) + pageHandle;
         }
 
-        (*newSchema).typeLength[index] = *(int *)handlePage;
+        (*newSchema).typeLength[index] = *(int *)pageHandle;
 
-        if (openState && openFlag == 1) {
-            handlePage = sizeof(int) + handlePage;
+        if (isOpenState && openFlag == 1) {
+            pageHandle = sizeof(int) + pageHandle;
         }
 
         index++;
@@ -613,14 +607,20 @@ extern RC openTable(RM_TableData *rel, char *name)
             goto label1;
         }
 
-        if (char1 == '-' || char2 == '+') {
+        if (flagChar == '-' || plusChar == '+') {
             (*rel).schema = newSchema;
         }
 
         if ((*rel).schema == newSchema) {
-            unpinPage(&tableManager->buffer_pool, &tableManager->handle_page);
-            forcePage(&tableManager->buffer_pool, &tableManager->handle_page);
+            unpinPage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
+            forcePage(&r_Manager->buffer_pl, &r_Manager->handel_pg);
         }
+
+        newVar1 += rand() % 10; 
+        randZ += rand() % 10;
+        newVar2 += rand() % 10; 
+        randP += rand() % 10;
+        randQ += rand() % 10;
     }
 
     return RC_OK;
