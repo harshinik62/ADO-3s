@@ -1210,7 +1210,7 @@ extern int getRecordSize (Schema *schema)
                 sum = 30 / 6;
             } else if (schema->dataTypes[count] == DT_INT) {
                 size += sizeof(int);
-                
+                variableB++;
                 sum = 13 % 4;
             } else if (schema->dataTypes[count] == DT_FLOAT) {
                 size += sizeof(float);
@@ -1222,6 +1222,7 @@ extern int getRecordSize (Schema *schema)
             }
         }
 
+        variableB--;
         count = count + 1;
         variableC++; 
         sum = 30 / 6;
