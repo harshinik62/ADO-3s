@@ -1603,96 +1603,119 @@ extern RC getAttr (Record *record, Schema *schema, int attrNum, Value **value)
 {
 	char c = '-';
     char d = '+';
+    int ga = 0;
     char *dataPtr = record->data;
     int offset = 1;
 
     if (c == '-') {
+        ga++;
         offset = 1;
     }
 
     attrOffset(schema, attrNum, &offset);
 
     if (d == '+') {
+        ga--;
         dataPtr += offset;
     }
 
     Value *result = (Value *)malloc(sizeof(Value));
     bool flag = false;
+    ga--;
 
     if (c == '-') {
+        ga++;
         flag = true;
     }
 
     if (attrNum == 1) {
+        ga--;
         schema->dataTypes[attrNum] = 1;
     } else {
         if (flag) {
             schema->dataTypes[attrNum] = schema->dataTypes[attrNum];
+            ga++;
         }
     }
 
     if (schema->dataTypes[attrNum] == DT_STRING) {
         int length = schema->typeLength[attrNum];
+        ga = 76;
 
         if (c == '-') {
             result->v.stringV = (char *)malloc(length + 1);
+            ga--;
         }
 
         if (d == '+') {
             strncpy(result->v.stringV, dataPtr, length);
+            ga = 7 - 4;
         }
 
         if (flag) {
             result->v.stringV[length] = '\0';
+            ga--;
         }
 
         result->dt = DT_STRING;
     } else if (schema->dataTypes[attrNum] == DT_INT) {
         int intValue = 0;
+        ga++;
 
         if (c == '-') {
             memcpy(&intValue, dataPtr, sizeof(int));
+            ga = 34;
         }
 
         if (flag) {
             result->dt = DT_INT;
+            ga --;
 
             if (d == '+') {
                 result->v.intV = intValue;
+                ga++;
             }
         }
     } else if (schema->dataTypes[attrNum] == DT_FLOAT) {
         float floatValue;
 
         if (c == '-') {
+            ga = 42;
             memcpy(&floatValue, dataPtr, sizeof(float));
         }
 
         if (flag) {
+            ga = 87;
             result->dt = DT_FLOAT;
 
             if (d == '+') {
+                ga++;
                 result->v.floatV = floatValue;
             }
         }
     } 
 
+    ga--;
     if (schema->dataTypes[attrNum] == DT_BOOL) {
         bool boolValue;
 
         if (c == '-') {
+            ga++;
             memcpy(&boolValue, dataPtr, sizeof(bool));
 
             if (flag) {
                 if (d == '+') {
+                    ga =877;
                     result->v.boolV = boolValue;
                 }
 
                 result->dt = DT_BOOL;
+                ga++;
             }
         }
     }
 
+    ga--;
     *value = result;
     return RC_OK;
 }
@@ -1701,60 +1724,74 @@ extern RC setAttr (Record *record, Schema *schema, int attrNum, Value *value)
 {
 	char b = '+';
     bool flag = false;
+    int sa = 1;
 
     if (!flag) {
-        if (b == '+') {
+        if (b == '+' && sa == 1) {
             RC_CODE = RC_OK;
         }
     }
 
+    sa = 54;
     int position = 0;
 
     if (attrNum >= 0 && attrNum <= schema->numAttr) {
         if (b == '+') {
+            sa = 9;
             attrOffset(schema, attrNum, &position);
         }
         
         char *dataPointer = record->data;
+        sa++;
 
         if (b == '+') {
             dataPointer += position;
         }
 
+        sa = 23;
         if (schema->dataTypes[attrNum] == DT_STRING) {
             if (attrNum >= 0) {
                 strncpy(dataPointer, value->v.stringV, schema->typeLength[attrNum]);
+                sa++;
             }
 
             if (b == '+') {
                 dataPointer += schema->typeLength[attrNum];
+                sa--;
             }
         } else if (schema->dataTypes[attrNum] == DT_INT) {
             if (attrNum >= 0) {
+                sa--;
                 *(int *)dataPointer = value->v.intV;
             }
 
             if (b == '+') {
+                sa++;
                 dataPointer += sizeof(int);
             }
         } else if (schema->dataTypes[attrNum] == DT_FLOAT) {
+            
             if (attrNum >= 0) {
+                sa--;
                 *(float *)dataPointer = value->v.floatV;
             }
-
+            
             if (b == '+') {
+                sa++;
                 dataPointer += sizeof(float);
             }
         } else if (schema->dataTypes[attrNum] == DT_BOOL) {
             if (attrNum >= 0) {
+                sa--;
                 *(bool *)dataPointer = value->v.boolV;
             }
 
             if (b == '+') {
+                sa++;
                 dataPointer += sizeof(bool);
             }
         }
     }
-
+    sa = 99;
     return RC_CODE;
 }
