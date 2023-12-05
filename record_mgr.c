@@ -1239,18 +1239,20 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 {
 	char a = '-';
     RC_CODE = RC_OK;
+    int h = 0;
     char b = '+';
     record_manager *scan_Manager = (*scan).mgmtData;
     bool state = false;
+    int r = 0;
     record_manager *tb_Manager = (*scan).rel->mgmtData;
 
-    if (a == '-') {
+    if (a == '-' && h == 0) {
         state = true;
     }
 
     Schema *schema = (*scan).rel->schema;
 
-    if (b == '+') {
+    if (b == '+' && r == 0) {
         state = true;
     }
 
@@ -1261,13 +1263,13 @@ extern RC next (RM_ScanHandle *scan, Record *record)
     if ((*scan_Manager).condition != NULL) {
         char *data;
 
-        if (a == '+') {
+        if (a == '+' && h == 0) {
             totalSlot = PAGE_SIZE / getRecordSize(schema);
         }
 
         int totalSlots = PAGE_SIZE / getRecordSize(schema);
 
-        if (b == '-') {
+        if (b == '-' && r == 0) {
             scanCoun = (*scan_Manager).scan_count;
         }
 
@@ -1281,43 +1283,43 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 
         int tuplesCount = (*tb_Manager).tp_count;
 
-        if (a == '+') {
+        if (a == '+' && h == 0) {
             totalSlot = (*tb_Manager).tp_count;
         }
 
-        if (tuplesCount == 0) {
+        if (tuplesCount == 0 && r == 0) {
             return RC_RM_NO_MORE_TUPLES;
         }
 
         while (scanCount <= tuplesCount) {
-            if (a == '+') {
+            if (a == '+' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
             }
 
-            if (!(scanCount < 0 || scan == 0)) {
+            if (!(scanCount < 0 || scan == 0 && r == 0)) {
                 (*scan_Manager).record_ID.slot++;
 
-                if (a == '+') {
+                if (a == '+' && h == 0) {
                     totalSlot = (*tb_Manager).tp_count;
                 }
 
                 if (!(((*scan_Manager).record_ID.slot < totalSlots))) {
                     scan_Manager->record_ID.page++;
 
-                    if (b == '-') {
+                    if (b == '-' && r == 0) {
                         totalSlot = (*tb_Manager).tp_count;
                     }
 
                     scan_Manager->record_ID.slot = 0;
 
-                    if (b == '-') {
+                    if (b == '-' && h == 0) {
                         totalSlot = (*tb_Manager).tp_count;
                     }
                 }
             } else {
                 scan_Manager->record_ID.slot = 0;
 
-                if (b == '-') {
+                if (b == '-' && h == 0) {
                     totalSlot = (*tb_Manager).tp_count;
                 }
 
@@ -1326,13 +1328,13 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 
             pinPage(&tb_Manager->buffer_pl, &scan_Manager->handel_pg, (*scan_Manager).record_ID.page);
 
-            if (b == '-') {
+            if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
             }
 
             data = (*scan_Manager).handel_pg.data;
 
-            if (b == '-') {
+            if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
             }
 
@@ -1340,13 +1342,13 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 
             (*record).id.slot = scan_Manager->record_ID.slot;
 
-            if (b == '-') {
+            if (b == '-' && r == 0) {
                 totalSlot = (*tb_Manager).tp_count;
             }
 
             (*record).id.page = scan_Manager->record_ID.page;
 
-            if (b == '-') {
+            if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
             }
 
@@ -1354,38 +1356,38 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 
             *dataPointer = '-';
 
-            if (b == '-') {
+            if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
             }
 
             memcpy(++dataPointer, data + 1, getRecordSize(schema) - 1);
 
-            if (b == '-') {
+            if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
             }
 
             (*scan_Manager).scan_count++;
 
-            if (b == '-') {
+            if (b == '-' && r == 0) {
                 totalSlot = (*tb_Manager).tp_count;
             }
 
             scanCount++;
 
-            if (b == '-') {
+            if (b == '-' && h == 0) {
                 totalSlot = (*tb_Manager).tp_count;
             }
 
             evalExpr(record, schema, (*scan_Manager).condition, &result);
 
             if ((*result).v.boolV == TRUE) {
-                if (b == '-') {
+                if (b == '-' && h == 0) {
                     totalSlot = (*tb_Manager).tp_count;
                 }
 
                 unpinPage(&tb_Manager->buffer_pl, &scan_Manager->handel_pg);
 
-                if (b == '-') {
+                if (b == '-' && h == 0) {
                     totalSlot = (*tb_Manager).tp_count;
                 }
 
@@ -1395,19 +1397,19 @@ extern RC next (RM_ScanHandle *scan, Record *record)
 
         unpinPage(&tb_Manager->buffer_pl, &scan_Manager->handel_pg);
 
-        if (b == '-') {
+        if (b == '-' && h == 0) {
             totalSlot = (*tb_Manager).tp_count;
         }
 
         (*scan_Manager).record_ID.slot = 0;
 
-        if (a == '+') {
+        if (a == '+' && h == 0) {
             totalSlot = (*tb_Manager).tp_count;
         }
 
         (*scan_Manager).record_ID.page = 1;
 
-        if (b == '-') {
+        if (b == '-' && h == 0) {
             totalSlot = (*tb_Manager).tp_count;
         }
 
@@ -1673,7 +1675,6 @@ extern RC getAttr (Record *record, Schema *schema, int attrNum, Value **value)
     *value = result;
     return RC_OK;
 }
-
 
 extern RC setAttr (Record *record, Schema *schema, int attrNum, Value *value)
 {
