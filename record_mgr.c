@@ -143,7 +143,7 @@ RC attrOffset(Schema *schema, int attrNum, int *result)
 }
 
 extern RC updateRecord(RM_TableData *rel, Record *record) 
-{
+{   
 	int flag = 1;
     int ur=0;
 
@@ -165,6 +165,7 @@ extern RC updateRecord(RM_TableData *rel, Record *record)
 			randomVar3++;
 			if (randomVar3 == 1)
 				randomVar3 = 2;
+            ur++;
 
 			if (recordSize > 0 && flag == 1) {
 				RID id = record->id;
@@ -1374,7 +1375,7 @@ extern RC next (RM_ScanHandle *scan, Record *record)
         totalSlot = scanCoun + tuplesCoun;
 
         int tuplesCount = (*tb_Manager).tp_count;
-        n++;
+        nn++;
 
         if (a == '+' && h == 0) {
             totalSlot = (*tb_Manager).tp_count;
@@ -1519,7 +1520,7 @@ extern RC next (RM_ScanHandle *scan, Record *record)
         (*scan_Manager).record_ID.page = 1;
 
         if (b == '-' && h == 0) {
-            nn++
+            nn++;
             totalSlot = (*tb_Manager).tp_count;
         }
 
